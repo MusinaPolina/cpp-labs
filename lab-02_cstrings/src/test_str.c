@@ -19,20 +19,26 @@ void test_strcmp() {
   assert(my_strcmp("abc", "z") == -1);
 }
 
+#include <stdio.h>
 
 void test_strcat() {
-  assert(my_strcat("abc", "defg") == (char*)"abcdefg");
-  char *emp = "";
-  assert(my_strcat(emp, "") == (char*)"");
-  assert(my_strcat(emp, "abc") == (char*)"abc");
-  assert(my_strcat("xxx", "") == (char*)"xxx");
+  char s1[10] = "abc";
+  assert(my_strcmp(my_strcat(s1, "defg"), "abcdefg") == 0);
+  char s2[10] = "";
+  assert(my_strcmp(my_strcat(s2, ""), "") == 0);
+  assert(my_strcmp(my_strcat(s2, "abc"), "abc") == 0);
+  char s3[10] = "xxx";
+  assert(my_strcmp(my_strcat(s3, ""), "xxx") == 0);
 }
 
 
-void test_strcpy() {
-  char *emp = "";
-  assert(my_strcpy(emp, "") == (char*)"");
-  assert(my_strcpy(emp, "abc") == (char*)"abc");
-  assert(my_strcpy("zzz", "") == (char*)"");
-  assert(my_strcpy("aaaaa", "xyz") == (char*)"xyz");
+void test_strcpy() { 
+  char s1[10] = "";
+  assert(my_strcmp(my_strcpy(s1, ""), "") == 0);
+  char s2[10] = "";
+  assert(my_strcmp(my_strcpy(s2, "abc"), "abc") == 0);
+  char s3[10] = "zzz";
+  assert(my_strcmp(my_strcpy(s3, ""), "") == 0);
+  char s4[10] = "aaaaa";
+  assert(my_strcmp(my_strcpy(s4, "xyz"), "xyz") == 0);
 }

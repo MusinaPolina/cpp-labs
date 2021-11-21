@@ -17,7 +17,7 @@ int my_strcmp(const char *s1, const char *s2) {
     }
     ++s1, ++s2;
   }
-  return (*s1 != *s2) * -1;
+  return -(*s2 != '\0');
 }	
 
 
@@ -26,10 +26,7 @@ char *my_strcat(char * restrict s1, const char * restrict s2) {
   while (*s != '\0') {
     ++s;
   }
-  while (*s2 != '\0') {
-    *s = *s2;
-    ++s, ++s2;
-  } 
+  my_strcpy(s, s2);
   return s1;
 }
 

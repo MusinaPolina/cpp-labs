@@ -32,6 +32,7 @@ void int_sort(int n, char **arg) {
   for (int i = 1; i < n - 2; i++) {
     printf(" %d", array[i]);
   }
+  printf("\n");
   free(array);
 }
 
@@ -50,6 +51,7 @@ void char_sort(int n, char **arg) {
   for (int i = 1; i < n - 2; i++) {
     printf(" %c", array[i]);
   }
+  printf("\n");
   free(array);
 }
 
@@ -67,6 +69,7 @@ void str_sort(int n, char **arg) {
   for (int i = 1; i < n - 2; i++) {
     printf(" %s", array[i]);
   }
+  printf("\n");
   free(array);
 }
 

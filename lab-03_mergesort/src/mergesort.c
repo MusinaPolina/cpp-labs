@@ -7,7 +7,7 @@
 
 void my_memcpy(void *ptr_d, void *ptr_s, size_t element_size) {
   for (size_t i = 0; i < element_size; i++) {
-    *((char *)ptr_d) = *((char *)ptr_s);
+    *((unsigned char *)ptr_d) = *((unsigned char *)ptr_s);
   }
 }
 

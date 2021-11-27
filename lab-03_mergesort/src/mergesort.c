@@ -6,8 +6,6 @@
 #include <stdio.h>
 
 void my_memcpy(void *ptr_d, void *ptr_s, size_t element_size) {
-  memcpy(ptr_d, ptr_s, element_size);
-  return;
   for (size_t i = 0; i < element_size; i++) {
     *((char *)ptr_d) = *((char *)ptr_s);
   }

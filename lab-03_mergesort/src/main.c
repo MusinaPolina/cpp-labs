@@ -66,7 +66,7 @@ static void str_sort(int n, char **arg) {
 
 int main(int argc, char **argv) {
   if (argc == 2) {
-    //printf("\n");
+    printf("\n");
     return 0;
   }
   if (argv[1][0] == 'i') {

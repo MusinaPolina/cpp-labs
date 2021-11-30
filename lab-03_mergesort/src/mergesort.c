@@ -5,17 +5,17 @@
 #include <string.h>
 #include <stdio.h>
 
-void my_memcpy(void *ptr_d, void *ptr_s, size_t element_size) {
+static void my_memcpy(void *ptr_d, void *ptr_s, size_t element_size) {
   for (size_t i = 0; i < element_size; i++) {
     *((char *)(ptr_d + i)) = *((char *)(ptr_s + i));
   }
 }
 
-void *array_pointer(void *array, size_t index, size_t element_size) {
+static void *array_pointer(void *array, size_t index, size_t element_size) {
   return array + index * element_size;
 }
 
-void merge(void *array, size_t elements, size_t half, size_t element_size, int (*comparator)(const void *, const void *)) {
+static void merge(void *array, size_t elements, size_t half, size_t element_size, int (*comparator)(const void *, const void *)) {
   void *buffer = malloc(elements * element_size);
   assert(buffer);
   size_t il = 0, ir = half;
@@ -31,15 +31,12 @@ void merge(void *array, size_t elements, size_t half, size_t element_size, int (
       ir++;
     }
   }
-  for (size_t i = il; i < half; i++) {
-    my_memcpy(array_pointer(buffer, i + ir - half, element_size), array_pointer(array, i, element_size), element_size); 
-  }
-  for (size_t i = ir; i < elements; i++) {
-    my_memcpy(array_pointer(buffer, il + i - half, element_size), array_pointer(array, i, element_size), element_size); 
-  }
-  for (size_t i = 0; i < elements; i++) {
-    my_memcpy(array_pointer(array, i, element_size), array_pointer(buffer, i, element_size), element_size);
-  }
+  my_memcpy(array_pointer(buffer, il + ir - half, element_size), array_pointer(array, il, element_size), element_size * (half - il)); 
+  
+  my_memcpy(array_pointer(buffer, il + ir - half, element_size), array_pointer(array, ir, element_size), element_size * (elements - ir)); 
+  
+  my_memcpy(array_pointer(array, 0, element_size), array_pointer(buffer, 0, element_size), element_size * elements);
+ 
   free(buffer); 
 }
 

@@ -9,15 +9,14 @@ static int cmp_int(const void *a, const void *b) {
 }
 
 static void int_sort(int n, char **arg) {
-  int m = n - 2;
-  int *array = malloc(m * sizeof(int));
+  int *array = malloc(n * sizeof(int));
   assert(array);
-  for (int i = 2; i < n; i++) {
-    array[i - 2] = atoi(arg[i]);
+  for (int i = 0; i < n; i++) {
+    array[i] = atoi(arg[i]);
   }
-  mergesort(array, m, sizeof(int), cmp_int);
+  mergesort(array, n, sizeof(int), cmp_int);
   printf("%d", array[0]);
-  for (int i = 1; i < m; i++) {
+  for (int i = 1; i < n; i++) {
     printf(" %d", array[i]);
   }
   printf("\n");
@@ -30,15 +29,14 @@ static int cmp_char(const void *a, const void *b) {
 }
 
 static void char_sort(int n, char **arg) {
-  int m = n - 2;
-  char *array = malloc(m * sizeof(char));
+  char *array = malloc(n * sizeof(char));
   assert(array);
-  for (int i = 2; i < n; i++) {
-    array[i - 2] = arg[i][0];
+  for (int i = 0; i < n; i++) {
+    array[i] = arg[i][0];
   }
-  mergesort(array, m, sizeof(char), cmp_char);
+  mergesort(array, n, sizeof(char), cmp_char);
   printf("%c", array[0]);
-  for (int i = 1; i < m; i++) {
+  for (int i = 1; i < n; i++) {
     printf(" %c", array[i]);
   }
   printf("\n");
@@ -50,14 +48,13 @@ static int cmp_str(const void *a, const void *b) {
 }
 
 static void str_sort(int n, char **arg) {
-  int m = n - 2;
-  char **array = malloc(m * sizeof(char *));
-  for (int i = 2; i < n; i++) {
-    array[i - 2] = arg[i];
+  char **array = malloc(n * sizeof(char *));
+  for (int i = 0; i < n; i++) {
+    array[i] = arg[i];
   }
-  mergesort(array, m, sizeof(char *), cmp_str);
+  mergesort(array, n, sizeof(char *), cmp_str);
   printf("%s", array[0]);
-  for (int i = 1; i < m; i++) {
+  for (int i = 1; i < n; i++) {
     printf(" %s", array[i]);
   }
   printf("\n");
@@ -70,11 +67,11 @@ int main(int argc, char **argv) {
     return 0;
   }
   if (argv[1][0] == 'i') {
-    int_sort(argc, argv);
+    int_sort(argc - 2, argv + 2);
   } else if (argv[1][0] == 'c') {
-    char_sort(argc, argv);
+    char_sort(argc - 2, argv + 2);
   } else if (argv[1][0] == 's') {
-    str_sort(argc, argv);
+    str_sort(argc - 2, argv + 2);
   }
   return 0;
 }

@@ -12,9 +12,6 @@ typedef struct point {
 void init_point(point_t *pnt, int x, int y) {
   pnt->x = x;
   pnt->y = y;
-  intrusive_node_t *ptr = malloc(sizeof(intrusive_node_t));
-  assert(ptr);
-  pnt->node = *ptr;
   pnt->node.prev = pnt->node.next = NULL;
 }
 

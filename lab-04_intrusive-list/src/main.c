@@ -17,6 +17,7 @@ void init_point(point_t *pnt, int x, int y) {
 
 void add_point(intrusive_list_t *list, int x, int y) {
   point_t *pnt = malloc(sizeof(struct point));
+  assert(pnt);
   init_point(pnt, x, y);
   add_node(list, &pnt->node);
 }
@@ -66,7 +67,7 @@ void remove_all_points(intrusive_list_t *list) {
 }
 
 int main() {
-  char cmd[10] = "";
+  char cmd[11] = "";
   intrusive_list_t l;
   init_list(&l);
   while (1) {

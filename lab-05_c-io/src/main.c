@@ -79,19 +79,17 @@ static void input_bin(intrusive_list_t *lst, char *infile) {
   fclose(file);
 }
 
-unsigned char * int_to_bytes(int x) {
+void int_to_bytes(int x, unsigned char *buffer) {
   if (x < 0) {
-    unsigned char *buffer = int_to_bytes(-x - 1);
+    int_to_bytes(-x - 1, buffer);
     for (int i = 0; i < byte_number; i++) {
       buffer[i] ^= byte_size;
     }
-    return buffer;
+    return;
   }
-  unsigned char *buffer = malloc(sizeof(unsigned char) * byte_number);
   for (int i = 0; i < byte_number; i++) {
     buffer[i] = (x >> (i * byte_shift)) & byte_size;
   }
-  return buffer;
 }
 
 static void print_pointfb(intrusive_node_t *node, void *data) {
@@ -99,10 +97,11 @@ static void print_pointfb(intrusive_node_t *node, void *data) {
     point_t *point = get_point(node);
     int int_size = sizeof(unsigned char) * byte_number;
     unsigned char *buffer = malloc(int_size * 2);
-    memcpy(buffer, int_to_bytes(point->x), int_size);
-    memcpy(buffer + int_size, int_to_bytes(point->y), int_size);
+    int_to_bytes(point->x, buffer);
+    int_to_bytes(point->y, buffer + int_size);
     assert(data);
     fwrite(buffer, sizeof(buffer[0]), int_size * 2, (FILE *)data);
+    free(buffer);
   }
 }
 

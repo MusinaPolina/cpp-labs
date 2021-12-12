@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+
 #ifndef CLIST_H_
 #define CLIST_H_
 
@@ -22,4 +23,5 @@ struct intrusive_node * remove_node(intrusive_list_t *list, intrusive_node_t *no
 void apply(intrusive_list_t *list, void (*op)(intrusive_node_t *node, void *data), void *data);
 
 #endif
+
 #define container_of(ptr, type, member) (type*)((char*)(ptr) - offsetof(type, member))

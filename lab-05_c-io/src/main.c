@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "point_list.h"
 
-void input_text(intrusive_list_t *list, char *infile) {
+static void input_text(intrusive_list_t *list, char *infile) {
   FILE *file = fopen(infile, "r");
   assert(file);
   int x, y;
@@ -14,18 +14,60 @@ void input_text(intrusive_list_t *list, char *infile) {
   fclose(file);
 }
 
-void save_text(intrusive_list_t *list, char *outfile) {
+static void print_pointft(intrusive_node_t *node, void *data) {
+  if (node) {
+    point_t *point = get_point(node);
+    assert(data);
+    fprintf((FILE *)data, "%d %d\n", point->x, point->y);
+  }
+}
+
+static void printft(intrusive_list_t *list, FILE *file) {
+  assert(list);
+  apply(list, &print_pointft, file);
+}
+
+
+static void save_text(intrusive_list_t *list, char *outfile) {
   FILE *file = fopen(outfile, "w");
   assert(file);
   printft(list, file);
   fclose(file);
 }
 
-int bytes_to_int(unsigned char *bytes) {
-  return (int)bytes[0] | ((int)bytes[1] << 8) | ((int)bytes[2] << 16);
+
+static void print_point(intrusive_node_t *node, void *data) {
+  if (node) {
+    point_t *point = get_point(node);
+    assert(data);
+    printf((char *)data, point->x, point->y);
+  }
 }
 
-void input_bin(intrusive_list_t *lst, char *infile) {
+static void print(intrusive_list_t *list, char *fmt) {
+  assert(list);
+  apply(list, &print_point, fmt);
+}
+
+const int byte_number = 3;
+static const int byte_shift = 8;
+static const int byte_size = (1 << byte_shift) - 1;
+
+static int bytes_to_int(unsigned char *bytes) {
+  if (bytes[byte_number - 1] & (1 << (byte_shift - 1))) {
+    for (int i = 0; i < byte_number; i++) {
+      bytes[i] ^= byte_size;
+    }
+    return -bytes_to_int(bytes) - 1;
+  }
+  int ans = 0;
+  for (int i = 0; i < byte_number; i++) {
+    ans |= (int)(bytes[i] << (byte_shift * i));
+  }
+  return ans;
+}
+
+static void input_bin(intrusive_list_t *lst, char *infile) {
   FILE *file = fopen(infile, "rb");
   assert(file);
   unsigned char bytes[6];
@@ -37,7 +79,39 @@ void input_bin(intrusive_list_t *lst, char *infile) {
   fclose(file);
 }
 
-void save_bin(intrusive_list_t *list, char *outfile) {
+unsigned char * int_to_bytes(int x) {
+  if (x < 0) {
+    unsigned char *buffer = int_to_bytes(-x - 1);
+    for (int i = 0; i < byte_number; i++) {
+      buffer[i] ^= byte_size;
+    }
+    return buffer;
+  }
+  unsigned char *buffer = malloc(sizeof(unsigned char) * byte_number);
+  for (int i = 0; i < byte_number; i++) {
+    buffer[i] = (x >> (i * byte_shift)) & byte_size;
+  }
+  return buffer;
+}
+
+static void print_pointfb(intrusive_node_t *node, void *data) {
+  if (node) {
+    point_t *point = get_point(node);
+    int int_size = sizeof(unsigned char) * byte_number;
+    unsigned char *buffer = malloc(int_size * 2);
+    memcpy(buffer, int_to_bytes(point->x), int_size);
+    memcpy(buffer + int_size, int_to_bytes(point->y), int_size);
+    assert(data);
+    fwrite(buffer, sizeof(buffer[0]), int_size * 2, (FILE *)data);
+  }
+}
+
+static void printfb(intrusive_list_t *list, FILE *file) {
+  assert(list);
+  apply(list, &print_pointfb, file);
+}
+
+static void save_bin(intrusive_list_t *list, char *outfile) {
   FILE *file = fopen(outfile, "wb");
   assert(file);
   printfb(list, file);

@@ -1,6 +1,8 @@
 #pragma once
 #include "clist.h"
-#include <stdio.h>
+
+#ifndef POINT_LIST_H_
+#define POINT_LIST_H_
 
 typedef struct point {
   int x, y;
@@ -13,8 +15,6 @@ int count_points(intrusive_list_t *list);
 
 void remove_all_points(intrusive_list_t *list);
 
-void print(intrusive_list_t *list, char *fmt);
+point_t * get_point(intrusive_node_t *node);
 
-void printft(intrusive_list_t *list, FILE *file);
-
-void printfb(intrusive_list_t *list, FILE *file);
+#endif

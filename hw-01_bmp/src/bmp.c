@@ -23,6 +23,22 @@ static void init_BMP(BMP *bmp, int h, int w) {
   }
 }
 
+void free_BMP(BMP *bmp) {
+  assert(bmp);
+  assert(bmp->infoh);
+  
+  int h = bmp->infoh->biHeight;
+  
+  for (int i = 0; i < h; i++) {
+    assert(bmp->pixel_array[i]);
+    free(bmp->pixel_array[i]);
+  }
+  free(bmp->pixel_array);
+  free(bmp->fileh);
+  free(bmp->infoh);
+  free(bmp);
+}
+
 
 BMP* load_bmp(FILE *input_file) {
   assert(input_file);
@@ -38,8 +54,12 @@ BMP* load_bmp(FILE *input_file) {
   BMP *bmp = malloc(sizeof(BMP));
   assert(bmp);
   init_BMP(bmp, infoh->biHeight, infoh->biWidth);
-  bmp->fileh = fileh;
-  bmp->infoh = infoh;
+  
+  memcpy(bmp->fileh, fileh, sizeof(BITMAPFILEHEADER));
+  memcpy(bmp->infoh, infoh, sizeof(BITMAPINFOHEADER));
+  
+  free(fileh);
+  free(infoh);
  
   for (int i = 0; i < infoh->biHeight; i++) {
     fread(bmp->pixel_array[i], sizeof(unsigned char), padding(infoh->biWidth), input_file);

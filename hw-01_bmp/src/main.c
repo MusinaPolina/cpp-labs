@@ -16,5 +16,9 @@ int main(int argc, char **argv) {
   assert(fout);
   save_bmp(rtt, fout);
   fclose(fout);
+  
+  free_BMP(bmp);
+  free_BMP(crp);
+  free_BMP(rtt);
   return 0;
 }

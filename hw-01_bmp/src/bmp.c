@@ -55,11 +55,11 @@ BMP* load_bmp(FILE *input_file) {
   assert(bmp);
   init_BMP(bmp, infoh->biHeight, infoh->biWidth);
   
-  memcpy(bmp->fileh, fileh, sizeof(BITMAPFILEHEADER));
-  memcpy(bmp->infoh, infoh, sizeof(BITMAPINFOHEADER));
+  free(bmp->fileh);
+  free(bmp->infoh);
   
-  free(fileh);
-  free(infoh);
+  bmp->fileh = fileh;
+  bmp->infoh = infoh;
  
   for (int i = 0; i < infoh->biHeight; i++) {
     fread(bmp->pixel_array[i], sizeof(unsigned char), padding(infoh->biWidth), input_file);

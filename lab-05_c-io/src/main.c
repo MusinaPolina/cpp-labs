@@ -15,11 +15,10 @@ static void input_text(intrusive_list_t *list, char *infile) {
 }
 
 static void print_pointft(intrusive_node_t *node, void *data) {
-  if (node) {
-    point_t *point = get_point(node);
-    assert(data);
-    fprintf((FILE *)data, "%d %d\n", point->x, point->y);
-  }
+  assert(node);
+  point_t *point = get_point(node);
+  assert(data);
+  fprintf((FILE *)data, "%d %d\n", point->x, point->y);
 }
 
 static void printft(intrusive_list_t *list, FILE *file) {
@@ -54,15 +53,16 @@ static const int byte_shift = 8;
 static const int byte_size = (1 << byte_shift) - 1;
 
 static int bytes_to_int(unsigned char *bytes) {
-  if (bytes[byte_number - 1] & (1 << (byte_shift - 1))) {
-    for (int i = 0; i < byte_number; i++) {
-      bytes[i] ^= byte_size;
-    }
-    return -bytes_to_int(bytes) - 1;
+  int negative = bytes[byte_number - 1] & (1 << (byte_shift - 1));
+  for (int i = 0; i < byte_number; i++) {
+    bytes[i] ^= byte_size * negative;
   }
   int ans = 0;
   for (int i = 0; i < byte_number; i++) {
     ans |= (int)(bytes[i] << (byte_shift * i));
+  }
+  if (negative) {
+    ans = -ans - 1;
   }
   return ans;
 }
@@ -93,16 +93,15 @@ void int_to_bytes(int x, unsigned char *buffer) {
 }
 
 static void print_pointfb(intrusive_node_t *node, void *data) {
-  if (node) {
-    point_t *point = get_point(node);
-    int int_size = sizeof(unsigned char) * byte_number;
-    unsigned char *buffer = malloc(int_size * 2);
-    int_to_bytes(point->x, buffer);
-    int_to_bytes(point->y, buffer + int_size);
-    assert(data);
-    fwrite(buffer, sizeof(buffer[0]), int_size * 2, (FILE *)data);
-    free(buffer);
-  }
+  assert(node);
+  point_t *point = get_point(node);
+  int int_size = sizeof(unsigned char) * byte_number;
+  unsigned char *buffer = malloc(int_size * 2);
+  int_to_bytes(point->x, buffer);
+  int_to_bytes(point->y, buffer + int_size);
+  assert(data);
+  fwrite(buffer, sizeof(buffer[0]), int_size * 2, (FILE *)data);
+  free(buffer);
 }
 
 static void printfb(intrusive_list_t *list, FILE *file) {

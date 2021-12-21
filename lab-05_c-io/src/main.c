@@ -55,7 +55,7 @@ static const int byte_size = (1 << byte_shift) - 1;
 static int bytes_to_int(unsigned char *bytes) {
   int negative = bytes[byte_number - 1] & (1 << (byte_shift - 1));
   for (int i = 0; i < byte_number; i++) {
-    bytes[i] ^= byte_size * negative;
+    bytes[i] ^= byte_size * (negative != 0);
   }
   int ans = 0;
   for (int i = 0; i < byte_number; i++) {

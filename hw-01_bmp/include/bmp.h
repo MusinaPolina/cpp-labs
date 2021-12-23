@@ -25,10 +25,14 @@ typedef struct tagBITMAPINFOHEADER {
   uint32_t biClrImportant;
 } BITMAPINFOHEADER;
 
+typedef struct tapPixel {
+  unsigned char r, g, b;
+} Pixel;
+
 typedef struct tagBMP {
-  BITMAPFILEHEADER *fileh;
-  BITMAPINFOHEADER *infoh;
-  unsigned char **pixel_array;
+  BITMAPFILEHEADER fileh;
+  BITMAPINFOHEADER infoh;
+  Pixel **pixel_array;
 } BMP;
 #pragma pack (pop)
 

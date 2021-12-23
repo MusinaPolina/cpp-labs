@@ -115,6 +115,6 @@ void save_bmp(BMP *bmp, FILE *output_file) {
   
   for (int i = 0; i < bmp->infoh.biHeight; i++) {
     fwrite(bmp->pixel_array[i], sizeof(Pixel), bmp->infoh.biWidth, output_file);
-    fwrite("000", sizeof(char), padding(bmp->infoh.biWidth), output_file);
+    fwrite("\0\0\0", sizeof(unsigned char), padding(bmp->infoh.biWidth), output_file);
   }
 }

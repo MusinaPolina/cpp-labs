@@ -60,7 +60,7 @@ static BMP * header_copy(BMP *bmp, int h, int w) {
   BMP *curr = malloc(sizeof(BMP));
   assert(curr);
   
-  uint32_t new_sz = h * w * 3 + padding(w);
+  uint32_t new_sz = h * (w * 3 + padding(w));
   
   curr->fileh = bmp->fileh;
   curr->infoh = bmp->infoh;
@@ -114,7 +114,9 @@ void save_bmp(BMP *bmp, FILE *output_file) {
   fwrite(&bmp->infoh, sizeof(BITMAPINFOHEADER), 1, output_file);
   
   for (int i = 0; i < bmp->infoh.biHeight; i++) {
-    fwrite(bmp->pixel_array[i], sizeof(Pixel), bmp->infoh.biWidth, output_file);
+    for (int j = 0; j < bmp->infoh.biWidth; j++) {
+      fwrite(&bmp->pixel_array[i][j], sizeof(Pixel), 1, output_file);
+    }
     fwrite("\0\0\0", sizeof(unsigned char), padding(bmp->infoh.biWidth), output_file);
   }
 }

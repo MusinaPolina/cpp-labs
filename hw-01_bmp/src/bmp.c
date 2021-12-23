@@ -83,7 +83,9 @@ BMP* crop(BMP *bmp, int x, int y, int w, int h) {
   BMP *curr = header_copy(bmp, h, w);
   
   for (int i = 0; i < h; i++) {
-    memcpy(curr->pixel_array[i], bmp->pixel_array[i + x] + sizeof(Pixel) * y, sizeof(Pixel) * w);
+    for (int j = 0; j < w; j++) {
+      curr->pixel_array[i][j] = bmp->pixel_array[i + y][j + x];
+    }
   }
   return curr;
 }

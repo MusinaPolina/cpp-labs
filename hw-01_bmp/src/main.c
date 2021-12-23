@@ -15,12 +15,12 @@ int main(int argc, char **argv) {
   
   BMP *crp = crop(bmp, atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
   
-  crp = crp;
+  //crp = crp;
   //printf("croped\n");
   
   BMP *rtt = rotate(crp);
   
-  rtt = rtt;
+  //rtt = rtt;
   //printf("rotated\n");
   
   FILE *fout = fopen(argv[3], "wb");

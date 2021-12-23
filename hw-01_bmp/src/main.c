@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
   
   //printf("loaded\n");
   int x = atoi(argv[4]), y = atoi(argv[5]), w = atoi(argv[6]), h = atoi(argv[7]);
-  y = bmp->infoh.biHeight - 1 - y;
+  y = bmp->infoh.biHeight - y - h;
   
   BMP *crp = crop(bmp, x, y, w, h);
   

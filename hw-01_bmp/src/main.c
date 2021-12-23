@@ -1,11 +1,12 @@
 #include "bmp.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char **argv) {
   assert(argc == 8);
   
-  if (strcmp(argc[1], "crop-rotate")) {
+  if (strcmp(argv[1], "crop-rotate") == 0) {
     FILE *fin = fopen(argv[2], "rb");
     assert(fin);
   

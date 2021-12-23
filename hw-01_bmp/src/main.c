@@ -12,8 +12,10 @@ int main(int argc, char **argv) {
   fclose(fin);
   
   //printf("loaded\n");
+  int x = atoi(argv[4]), y = atoi(argv[5]), w = atoi(argv[6]), h = atoi(argv[7]);
+  y = bmp->infoh.biHeight - 1 - y;
   
-  BMP *crp = crop(bmp, atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
+  BMP *crp = crop(bmp, x, y, w, h);
   
   //crp = crp;
   //printf("croped\n");

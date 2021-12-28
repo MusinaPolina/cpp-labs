@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
     write_bmp(&bmp, argv[3]);
      
     free(msg);
+    free(key.keys);
     
   } else if (strcmp(argv[1], "extract") == 0) {
     assert(argc == 5);
@@ -100,9 +101,11 @@ int main(int argc, char **argv) {
     write_msg(msg, argv[4]);
     
     free(msg);
+    free(key.keys);
     
   } else {
     assert(0);
   }
+  free_pixel_array(&bmp);
   return 0;
 }

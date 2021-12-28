@@ -25,16 +25,18 @@ static void init_BMP(BMP *bmp, int h, int w) {
 }
 
 
-void free_BMP(BMP *bmp) {
-  assert(bmp);
-  
+void free_pixel_array(BMP *bmp) {
   int h = bmp->infoh.biHeight;
-  
   for (int i = 0; i < h; i++) {
     assert(bmp->pixel_array[i]);
     free(bmp->pixel_array[i]);
   }
   free(bmp->pixel_array);
+}
+
+void free_BMP(BMP *bmp) {
+  assert(bmp);
+  free_pixel_array(bmp);  
   free(bmp);
 }
 

@@ -42,4 +42,5 @@ BMP * crop(BMP *bmp, int x, int y, int w, int h);
 BMP * rotate(BMP *bmp);
 void save_bmp(BMP *bmp, FILE *output_file);
 
+void free_pixel_array(BMP *bmp);
 void free_BMP(BMP *bmp);

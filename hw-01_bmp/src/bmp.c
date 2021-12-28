@@ -5,8 +5,10 @@
 #include <string.h>
 
 
-static uint32_t padding(uint32_t x) {
-  return (4 - (x * 3) % 4) % 4;
+static const int ALIGNNMENT = 4;
+
+static uint32_t padding(int width) {
+  return (ALIGNNMENT - (width * sizeof(Pixel)) % ALIGNNMENT) % ALIGNNMENT;
 }
 
 
@@ -37,11 +39,9 @@ void free_BMP(BMP *bmp) {
 }
 
 
-BMP* load_bmp(FILE *input_file) {
-  assert(input_file);
-  
-  BMP *bmp = malloc(sizeof(BMP));
+BMP* load_bmp(BMP *bmp, FILE *input_file) {
   assert(bmp);
+  assert(input_file);
   
   fread(&bmp->fileh, sizeof(BITMAPFILEHEADER), 1, input_file);
   fread(&bmp->infoh, sizeof(BITMAPINFOHEADER), 1, input_file);
@@ -60,13 +60,13 @@ static BMP * header_copy(BMP *bmp, int h, int w) {
   BMP *curr = malloc(sizeof(BMP));
   assert(curr);
   
-  uint32_t new_sz = h * (w * 3 + padding(w));
-  
   curr->fileh = bmp->fileh;
   curr->infoh = bmp->infoh;
   
   curr->infoh.biHeight = h;
   curr->infoh.biWidth = w;
+  
+  uint32_t new_sz = h * (w * sizeof(Pixel) + padding(w));
   
   curr->infoh.biSizeImage = new_sz;
   curr->fileh.bfSize = new_sz + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);

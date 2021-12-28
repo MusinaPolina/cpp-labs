@@ -26,7 +26,7 @@ typedef struct tagBITMAPINFOHEADER {
 } BITMAPINFOHEADER;
 
 typedef struct tapPixel {
-  unsigned char r, g, b;
+  unsigned char b, g, r;
 } Pixel;
 
 typedef struct tagBMP {
@@ -37,8 +37,7 @@ typedef struct tagBMP {
 #pragma pack (pop)
 
 
-
-BMP * load_bmp(FILE *input_file);
+BMP * load_bmp(BMP *bmp, FILE *input_file);
 BMP * crop(BMP *bmp, int x, int y, int w, int h);
 BMP * rotate(BMP *bmp);
 void save_bmp(BMP *bmp, FILE *output_file);

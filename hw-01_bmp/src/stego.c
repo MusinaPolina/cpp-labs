@@ -50,7 +50,9 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
 static const int BITS_IN_CODE = 5;
 
 static void insert_pixel(unsigned char *bit, bool value) {
-  *bit = (((*bit) | 1) ^ 1) ^ value;
+  if ((bool)(*bit & 1) != value) {
+    *bit ^= 1;
+  }
 }
 
 static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
@@ -73,7 +75,7 @@ void insert(BMP *bmp, Keys *key, char *msg) {
 }
 
 static bool extract_pixel(unsigned char* bit) {
-  return *(int *)bit & 1;
+  return *bit & 1;
 }
 
 static char extract_code(BMP *bmp, Keys *key, size_t *key_index) {

@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 static int symbol_to_code(char *c) {
-  if ('A' <= *c && *c <+ 'Z') {
+  if ('A' <= *c && *c <= 'Z') {
     return *c - 'A';
   }
   switch (*c) {
@@ -29,8 +29,8 @@ static char code_to_symbol(int c) {
   }
 }
 
-unsigned char * get_component(Pixel *p, char component) {
-  switch (component) {
+unsigned char * get_component(Pixel *p, char *c) {
+  switch (*c) {
     case 'R': return &p->r;
     case 'G': return &p->g;
     case 'B': return &p->b;
@@ -43,7 +43,8 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
   char c = key->c;
   
   assert(x >= 0 && y >= 0 && x < bmp->infoh.biWidth && y < bmp->infoh.biHeight);
-  return get_component(&(bmp->pixel_array[x][y]), c);
+  
+  return get_component(&(bmp->pixel_array[x][y]), &c);
 }
 
 static const int BITS_IN_CODE = 5;

@@ -41,10 +41,10 @@ char * read_msg(char *link, BMP *bmp) {
   
   char *msg = malloc(sizeof(char) * bmp->infoh.biSizeImage);
   assert(msg);
+  
   fgets(msg, bmp->infoh.biSizeImage, fin);
   
   fclose(fin);
-    
   return msg;
 }
 

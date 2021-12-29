@@ -49,8 +49,8 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
 
 static const int BITS_IN_CODE = 5;
 
-static void insert_pixel(unsigned char *bit, int value) {
-  *bit = ((*bit | 1) ^ 1) ^ (value > 0);
+static void insert_pixel(unsigned char *bit, bool value) {
+  *bit = ((*bit | 1) ^ 1) ^ value;
 }
 
 static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
@@ -66,7 +66,7 @@ static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
 
 void insert(BMP *bmp, Keys *key, char *msg) {
   size_t key_index = 0;
-  for (size_t i = 0; i < strlen(msg); i++) {    
+  for (size_t i = 0; i < strlen(msg) - 1; i++) {    
     if (insert_code(bmp, symbol_to_code(&msg[i]), key, &key_index)) {
       return;
     }

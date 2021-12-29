@@ -49,6 +49,7 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
   char c = key->c;
   
   assert(x >= 0 && y >= 0 && x < bmp->infoh.biWidth && y < bmp->infoh.biHeight);
+  
   return get_component(&(bmp->pixel_array[y][x]), &c);
 }
 

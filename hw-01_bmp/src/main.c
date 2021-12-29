@@ -25,8 +25,11 @@ void write_bmp(BMP *bmp, char *link) {
 void read_key(char *link, Keys *key, BMP *bmp) {
   FILE *fin = fopen(link, "r");
   assert(fin);
+  
+  key->size = 0;
   key->keys = malloc(sizeof(Key) * bmp->infoh.biSizeImage);
-  assert(key);
+  assert(key->keys);
+  
   while (fscanf(fin, "%d %d %c", &key->keys[key->size].x, &key->keys[key->size].y, &key->keys[key->size].c) == 3) {
     key->keys[key->size].y = bmp->infoh.biHeight - 1 - key->keys[key->size].y;
     key->size++;
@@ -43,8 +46,7 @@ char * read_msg(char *link, int max_size) {
   assert(msg);
   
   for (int i = 0; i < max_size; i++) {
-    while (fscanf(fin, "%c", &msg[i]) != 1) {
-      msg[i] = 0;
+    if (fscanf(fin, "%c", &msg[i]) != 1) {
       break;
     }
   }
@@ -67,7 +69,6 @@ int main(int argc, char **argv) {
   assert(argc > 1);
   BMP bmp;
   Keys key;
-  key.size = 0;
   
   if (strcmp(argv[1], "crop-rotate") == 0) {  
     assert(argc == 8);
@@ -102,6 +103,7 @@ int main(int argc, char **argv) {
     
     read_bmp(&bmp, argv[2]);
     read_key(argv[3], &key, &bmp);
+    
     char *msg = extract(&bmp, &key);
     write_msg(msg, argv[4]);
     
@@ -111,6 +113,7 @@ int main(int argc, char **argv) {
   } else {
     assert(0);
   }
+  
   free_pixel_array(&bmp);
   return 0;
 }

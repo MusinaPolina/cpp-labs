@@ -26,7 +26,7 @@ typedef struct tagBITMAPINFOHEADER {
 } BITMAPINFOHEADER;
 
 typedef struct tapPixel {
-  unsigned char r, g, b;
+  unsigned char b, g, r;
 } Pixel;
 
 typedef struct tagBMP {

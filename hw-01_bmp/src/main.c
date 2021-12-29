@@ -39,10 +39,13 @@ char * read_msg(char *link, BMP *bmp) {
   FILE *fin = fopen(link, "r");
   assert(fin);
   
-  char *msg = malloc(sizeof(char) * bmp->infoh.biSizeImage);
+  char *msg = calloc(bmp->infoh.biSizeImage, sizeof(char));
   assert(msg);
   
-  fgets(msg, bmp->infoh.biSizeImage, fin);
+  size_t msg_size = 0;
+  while (fscanf(fin, "%c", &msg[msg_size]) == 1) {
+    msg_size++;
+  }
   
   fclose(fin);
   return msg;

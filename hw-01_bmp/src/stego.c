@@ -50,16 +50,15 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
 static const int BITS_IN_CODE = 5;
 
 static void insert_pixel(unsigned char *bit, bool value) {
-  *bit = ((*bit | 1) ^ 1) ^ value;
+  *bit = (((*bit) | 1) ^ 1) ^ value;
 }
 
 static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
-  for (int i = 0; i < BITS_IN_CODE; i++) {
+  for (int i = 0; i < BITS_IN_CODE; i++, (*key_index)++) {
     if (*key_index == key->size) {
       return 1;
     }
-    insert_pixel(key_pixel(&key->keys[*key_index], bmp), code & (1 << i));
-    (*key_index)++;
+    insert_pixel(key_pixel(&key->keys[*key_index], bmp), code & (1 << i)); 
   }
   return 0;
 }
@@ -77,7 +76,7 @@ static bool extract_pixel(unsigned char* bit) {
   return *(int *)bit & 1;
 }
 
-static char extract_code(Keys *key, size_t *key_index, BMP *bmp) {
+static char extract_code(BMP *bmp, Keys *key, size_t *key_index) {
   int code = 0;
   for (int i = 0; i < BITS_IN_CODE; i++, (*key_index)++) {
   		code |= (1 << i) * extract_pixel(key_pixel(&key->keys[*key_index], bmp));
@@ -90,7 +89,7 @@ char * extract(BMP *bmp, Keys *key) {
   size_t key_index = 0;
   char *msg = calloc(msg_size, sizeof(char));
   for (size_t i = 0; i < msg_size - 1; i++) {
-    msg[i] = extract_code(key, &key_index, bmp);
+    msg[i] = extract_code(bmp, key, &key_index);
   }
   return msg;
 }

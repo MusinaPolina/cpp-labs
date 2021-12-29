@@ -66,7 +66,7 @@ static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
 
 void insert(BMP *bmp, Keys *key, char *msg) {
   size_t key_index = 0;
-  for (size_t i = 0; i < strlen(msg) - 1; i++) {    
+  for (size_t i = 0; i < strlen(msg); i++) {    
     if (insert_code(bmp, symbol_to_code(&msg[i]), key, &key_index)) {
       return;
     }

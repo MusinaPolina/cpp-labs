@@ -49,8 +49,7 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
   char c = key->c;
   
   assert(x >= 0 && y >= 0 && x < bmp->infoh.biWidth && y < bmp->infoh.biHeight);
-  
-  return get_component(&(bmp->pixel_array[x][y]), &c);
+  return get_component(&(bmp->pixel_array[y][x]), &c);
 }
 
 static void insert_pixel(unsigned char *bit, bool value) {
@@ -59,8 +58,8 @@ static void insert_pixel(unsigned char *bit, bool value) {
   }
 }
 
-static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
-  for (int i = 0; i < BITS_IN_CODE; i++, (*key_index)++) {
+static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) { 
+  for (int i = 0; i < BITS_IN_CODE; i++, (*key_index)++) { 
     if (*key_index == key->size) {
       return 1;
     }
@@ -94,7 +93,7 @@ static char extract_code(BMP *bmp, Keys *key, size_t *key_index) {
 char * extract(BMP *bmp, Keys *key) {
   size_t key_index = 0;
   int msize = msg_size(key);
-  char *msg = calloc(msize, sizeof(char));
+  char *msg = calloc(msize + 1, sizeof(char));
   for (int i = 0; i < msize; i++) {
     msg[i] = extract_code(bmp, key, &key_index);
   }

@@ -35,16 +35,18 @@ void read_key(char *link, Keys *key, BMP *bmp) {
 }
 
 
-char * read_msg(char *link, BMP *bmp) {
+char * read_msg(char *link, int max_size) {
   FILE *fin = fopen(link, "r");
   assert(fin);
   
-  char *msg = calloc(bmp->infoh.biSizeImage, sizeof(char));
+  char *msg = calloc((max_size + 1), sizeof(char));
   assert(msg);
   
-  size_t msg_size = 0;
-  while (fscanf(fin, "%c", &msg[msg_size]) == 1) {
-    msg_size++;
+  for (int i = 0; i < max_size; i++) {
+    while (fscanf(fin, "%c", &msg[i]) != 1) {
+      msg[i] = 0;
+      break;
+    }
   }
   
   fclose(fin);
@@ -87,7 +89,7 @@ int main(int argc, char **argv) {
     
     read_bmp(&bmp, argv[2]);
     read_key(argv[4], &key, &bmp);
-    char *msg = read_msg(argv[5], &bmp);
+    char *msg = read_msg(argv[5], msg_size(&key));
     
     insert(&bmp, &key, msg);   
     write_bmp(&bmp, argv[3]);

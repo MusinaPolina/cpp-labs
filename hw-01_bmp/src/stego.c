@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+static const int BITS_IN_CODE = 5;
+
+int msg_size(Keys *key) {
+  return key->size / BITS_IN_CODE;
+}
+
 static int symbol_to_code(char *c) {
   if ('A' <= *c && *c <= 'Z') {
     return *c - 'A';
@@ -47,8 +53,6 @@ static unsigned char * key_pixel(Key *key, BMP *bmp) {
   return get_component(&(bmp->pixel_array[x][y]), &c);
 }
 
-static const int BITS_IN_CODE = 5;
-
 static void insert_pixel(unsigned char *bit, bool value) {
   if ((bool)(*bit & 1) != value) {
     *bit ^= 1;
@@ -67,10 +71,11 @@ static bool insert_code(BMP* bmp, int code, Keys *key, size_t *key_index) {
 
 void insert(BMP *bmp, Keys *key, char *msg) {
   size_t key_index = 0;
-  for (size_t i = 0; i < strlen(msg) - 1; i++) {    
-    if (insert_code(bmp, symbol_to_code(&msg[i]), key, &key_index)) {
+  while (*msg != 0) {    
+    if (insert_code(bmp, symbol_to_code(msg), key, &key_index)) {
       return;
     }
+    msg++;
   }
 }
 
@@ -87,10 +92,10 @@ static char extract_code(BMP *bmp, Keys *key, size_t *key_index) {
 }
 
 char * extract(BMP *bmp, Keys *key) {
-  size_t msg_size = key->size / BITS_IN_CODE + 1;
   size_t key_index = 0;
-  char *msg = calloc(msg_size, sizeof(char));
-  for (size_t i = 0; i < msg_size - 1; i++) {
+  int msize = msg_size(key);
+  char *msg = calloc(msize, sizeof(char));
+  for (int i = 0; i < msize; i++) {
     msg[i] = extract_code(bmp, key, &key_index);
   }
   return msg;

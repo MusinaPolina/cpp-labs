@@ -13,3 +13,4 @@ typedef struct tagKeys {
 
 void insert(BMP *bmp, Keys *keys, char *msg);
 char * extract(BMP *bmp, Keys *keys);
+int msg_size(Keys *key);

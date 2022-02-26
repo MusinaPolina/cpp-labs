@@ -7,7 +7,10 @@ class MyVector {
 public:
     MyVector();
     MyVector(std::size_t init_capacity);
+    MyVector(MyVector const &src);
     ~MyVector();
+
+    void operator =(MyVector const &src);
 
     void set(std::size_t index, int value);
     int get(std::size_t index);

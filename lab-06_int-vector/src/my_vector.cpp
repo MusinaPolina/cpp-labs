@@ -6,15 +6,14 @@ using std::size_t;
 
 MyVector::MyVector() : MyVector(2) {}
 
-/*MyVector::MyVector(MyVector const &src) {
-    //size_t len = std::strlen(src.s)
-    //s = new char[len + 1];
-    //std::memcpy(s, src.s, std::strlen(s));
+MyVector::MyVector(MyVector const &src) {
+    _size = src._size;
+    _capacity = src._capacity;
+    _data = new int[_capacity];
+    for (int i = 0; i < _size; i++) {
+        _data[i] = src._data[i];
+    }
 }
-
-MyVector::MyVector &operator =(MyVector src) {
-    if ()
-}*/
 
 MyVector::MyVector(size_t init_capacity) {
     _size = 0;

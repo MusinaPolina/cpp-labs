@@ -6,6 +6,16 @@ using std::size_t;
 
 MyVector::MyVector() : MyVector(2) {}
 
+/*MyVector::MyVector(MyVector const &src) {
+    //size_t len = std::strlen(src.s)
+    //s = new char[len + 1];
+    //std::memcpy(s, src.s, std::strlen(s));
+}
+
+MyVector::MyVector &operator =(MyVector src) {
+    if ()
+}*/
+
 MyVector::MyVector(size_t init_capacity) {
     _size = 0;
     _capacity = init_capacity;
@@ -63,8 +73,7 @@ void MyVector::resize(size_t new_size) {
 void MyVector::push_back(int value) {
     assert(_size <= _capacity);
     if (_size == _capacity) {
-        _capacity *= 2;
-        reserve(_capacity);
+        reserve(_capacity * 2);
     }
     _data[_size++] = value;
 }

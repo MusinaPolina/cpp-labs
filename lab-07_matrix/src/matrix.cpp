@@ -101,7 +101,13 @@ Matrix Matrix::operator+(Matrix m) const {
 }
 
 Matrix Matrix::operator-(Matrix m) const {
-    return m -= *this;
+    assert(_rows == m._rows && _cols == m._cols);
+    for (int r = 0; r < _rows; r++) {
+        for (int c = 0; c < _cols; c++) {
+            m._data[r][c] = _data[r][c] - m._data[r][c];
+        }
+    }
+    return m;
 }
 
 Matrix Matrix::operator*(Matrix const &m) const {

@@ -43,11 +43,11 @@ int Matrix::get(std::size_t i, std::size_t j) const {
 
 void Matrix::print(FILE *f) const {
     for (int r = 0; r < _rows; r++) {
-        if (_cols) {
-            fprintf(f, "%d", _data[r][0]);
-        }
-        for (int c = 1; c < _cols; c++) {
+        for (int c = 0; c < _cols - 1; c++) {
             fprintf(f, "%d ", _data[r][c]);
+        }
+        if (_cols) {
+            fprintf(f, "%d", _data[r][_cols - 1]);
         }
         fprintf(f, "\n");
     }

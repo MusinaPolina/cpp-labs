@@ -5,19 +5,16 @@
 Matrix::Matrix(std::size_t r, std::size_t c) {
     _rows = r;
     _cols = c;
-    _data = new int *[r];
+    _data = new int *[_rows];
     for (int _r = 0; _r < _rows; _r++) {
-        _data[_r] = new int[c];
-        for (int _c = 0; _c < _cols; _c++) {
-            _data[_r][_c] = 0;
-        }
+        _data[_r] = new int[_cols]();
     }
 }
 
 Matrix::Matrix(Matrix const &m) : Matrix(m._rows, m._cols) {
-    for (int r = 0; r < m._rows; r++) {
-        for (int c = 0; c < m._cols; c++) {
-            _data[r][c] = m._data[r][c];
+    for (int _r = 0; _r < _rows; _r++) {
+        for (int _c = 0; _c < _cols; _c++) {
+            _data[_r][_c] = m._data[_r][_c];
         }
     }
 }

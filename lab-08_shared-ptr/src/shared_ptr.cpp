@@ -1,13 +1,14 @@
+#include <cassert>
 #include "shared_ptr.hpp"
 #include "matrix.hpp"
 
-shared_ptr::Strorage::Storage(Matrix *mtx) {
+shared_ptr::Storage::Storage(Matrix *mtx) {
     data_ = mtx;
     ref_count_ = 1;
 }
 
-shared_ptr::Strorage::~Storage() {
-    delete mtx;
+shared_ptr::Storage::~Storage() {
+    delete data_;
 }
 
 void shared_ptr::Storage::incr() {
@@ -16,6 +17,9 @@ void shared_ptr::Storage::incr() {
 
 void shared_ptr::Storage::decr() {
     ref_count_--;
+    if (ref_count_ == 0) {
+        delete this;
+    }
 }
 
 int shared_ptr::Storage::getCounter() const {
@@ -26,7 +30,7 @@ Matrix* shared_ptr::Storage::getObject() const {
     return data_;
 }
 
-shared_ptr::shared_ptr(Matrix *obj = nullptr) {
+shared_ptr::shared_ptr(Matrix* obj) {
     storage_ = nullptr;
     if (obj) {
         storage_ = new Storage(obj);
@@ -34,9 +38,8 @@ shared_ptr::shared_ptr(Matrix *obj = nullptr) {
 }
 
 shared_ptr::~shared_ptr() {
-    storage_.decr();
-    if (storage.getCounter() == 0) {
-        delete storage_;
+    if (storage_) {
+        storage_->decr();
     }
 }
 
@@ -55,10 +58,10 @@ Matrix* shared_ptr::ptr() const {
 }
 
 bool shared_ptr::isNull() const {
-    return (shared_ == nullptr);
+    return (storage_ == nullptr);
 }
 
-void reset(Matrix* obj = nullptr) {
+void shared_ptr::reset(Matrix* obj) {
     if (storage_) {
         storage_->decr();
     }
@@ -68,14 +71,14 @@ void reset(Matrix* obj = nullptr) {
     }
 }
 
-Matrix* operator->() const {
+Matrix* shared_ptr::operator->() const {
     if (storage_) {
         return storage_->getObject();
     }
     return nullptr;
 }
 
-Matrix&  operator*() const {
+Matrix& shared_ptr::operator*() const {
     assert(storage_ != nullptr);
     return *storage_->getObject();
 }

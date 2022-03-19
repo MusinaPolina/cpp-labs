@@ -16,7 +16,9 @@ public:
 	/**
 	 * Присваивает умному указателю новое значение, корректно меняя владение с одного объекта на другой.
 	 */
-    shared_ptr& operator=(shared_ptr other);
+    shared_ptr& operator=(shared_ptr other) {
+        std::swap(storage_, other.storage_);
+    }
     ~shared_ptr();
 
 	/**

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Circle.hpp"
 
-Circle::Circle(int id, int x, int y, int radius, const char* label): Figure(id, x, y),
+Circle::Circle(int id, int x, int y, int radius, std::string label): Figure(id, x, y),
     radius(radius), label(label) {};
 
 void Circle::print() const {
@@ -21,6 +21,6 @@ void Circle::zoom(int factor) {
     radius *= factor;
 }
 
-char* Circle::get_name() const {
+std::string Circle::get_name() const {
     return "Circle";
 }

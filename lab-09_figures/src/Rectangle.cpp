@@ -18,6 +18,6 @@ void Rectangle::zoom(int factor) {
     height *= factor;
 }
 
-char* Rectangle::get_name() const {
+std::string Rectangle::get_name() const {
     return "Rectangle";
 }

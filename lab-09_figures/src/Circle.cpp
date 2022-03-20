@@ -25,6 +25,6 @@ void Circle::zoom(int factor) {
     radius *= factor;
 }
 
-char* Circle::get_name() const {
+const char* Circle::get_name() const {
     return "Circle";
 }

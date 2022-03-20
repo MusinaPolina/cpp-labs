@@ -12,7 +12,7 @@ public:
     void move(int new_x, int new_y);
 
     int get_id() const;
-    virtual char* get_name() const = 0;
+    virtual const char* get_name() const = 0;
 
 protected:
     int id;

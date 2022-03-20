@@ -17,6 +17,7 @@ public:
     void move(int id, int new_x, int new_y);
 
 private:
+    int capacity_;
     std::size_t size_;
     Figure** figures_; // размер массива задается в конструкторе и больше не растет
 };

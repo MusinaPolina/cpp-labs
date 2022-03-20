@@ -1,11 +1,15 @@
 #include <iostream>
+#include <cstring>
 #include "Circle.hpp"
 
-Circle::Circle(int id, int x, int y, int radius, const char* label): Figure(id, x, y),
-    radius(radius), label(label) {};
+Circle::Circle(int id, int x, int y, int radius, const char* label_): Figure(id, x, y),
+    radius(radius) {
+    label =  new char [strlen(label_) + 1];
+    strcpy(label, label_);
+};
 
 Circle::~Circle() {
-    delete label;
+    delete[] label;
 }
 
 void Circle::print() const {

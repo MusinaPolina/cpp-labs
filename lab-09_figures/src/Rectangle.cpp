@@ -4,6 +4,8 @@
 Rectangle::Rectangle(int id, int x, int y, int width, int height): Figure(id, x, y),
     width(width), height(height) {};
 
+Rectangle::~Rectangle() {}
+
 void Rectangle::print() const {
     Figure::print();
     std::cout << " width = " << width << " height = " << height << std::endl;

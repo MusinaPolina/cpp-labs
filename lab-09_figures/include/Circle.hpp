@@ -11,7 +11,7 @@ public:
     bool is_inside(int x, int y) const override;
     void zoom(int factor) override;
 
-    char* get_name() const;
+    char* get_name() const override;
 
 private:
     int radius;

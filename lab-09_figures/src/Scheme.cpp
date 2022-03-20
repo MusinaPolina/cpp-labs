@@ -8,6 +8,9 @@ Scheme::Scheme(int capacity) {
 }
 
 Scheme::~Scheme() {
+    for (size_t i = 0; i < size_; i++) {
+        delete figures_[i];
+    }
     delete[] figures_;
 }
 

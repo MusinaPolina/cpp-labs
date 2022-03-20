@@ -13,5 +13,5 @@ int Figure::get_id() const {
 }
 
 void Figure::print() const {
-    std::cout << get_name() << ' ' << id << " : x = " << x << " y = " << y;
+    std::cout << get_name() << ' ' << id << ": x = " << x << " y = " << y;
 }

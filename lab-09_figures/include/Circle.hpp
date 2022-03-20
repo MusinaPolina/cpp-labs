@@ -4,15 +4,16 @@
 
 class Circle : public Figure {
 public:
-    Circle(int id, int x, int y, int radius, std::string label);
+    Circle(int id, int x, int y, int radius, const char* label);
+    ~Circle();
 
     void print() const override;
     bool is_inside(int x, int y) const override;
     void zoom(int factor) override;
 
-    std::string get_name() const override;
+    char* get_name() const;
 
 private:
     int radius;
-    std::string label;
+    const char* label;
 };

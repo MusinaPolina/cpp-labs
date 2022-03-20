@@ -4,6 +4,10 @@
 Circle::Circle(int id, int x, int y, int radius, std::string label): Figure(id, x, y),
     radius(radius), label(label) {};
 
+Circle::~Circle() {
+    delete label;
+}
+
 void Circle::print() const {
     Figure::print();
     std::cout << " radius = " << radius << " label = " << label << std::endl;

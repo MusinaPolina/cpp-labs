@@ -61,7 +61,7 @@ Figure* Scheme::is_inside_figure(int x, int y) {
 }
 
 void Scheme::move(int id, int new_x, int new_y) {
-    size_t ind = index_by_id(figures_, size_, ind);
+    size_t ind = index_by_id(figures_, size_, id);
     if (ind < size_) {
         figures_[ind]->move(new_x, new_y);
     }

@@ -44,7 +44,7 @@ private:
         void incr();
         void decr();
 
-        int getCounter() const;
+            int getCounter() const;
         Matrix* getObject() const;
 
     private:

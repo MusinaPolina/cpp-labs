@@ -14,4 +14,5 @@ public:
 private:
     int width;
     int height;
+    const char* NAME = "Rectangle";
 };

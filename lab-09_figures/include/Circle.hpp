@@ -15,5 +15,6 @@ public:
 
 private:
     int radius;
-    char* label;
+    const char* label;
+    const char* NAME = "Circle";
 };

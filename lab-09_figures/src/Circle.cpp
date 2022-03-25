@@ -1,16 +1,9 @@
 #include <iostream>
-#include <cstring>
 #include "Circle.hpp"
 
-Circle::Circle(int id, int x, int y, int radius, const char* label_): Figure(id, x, y),
-    radius(radius) {
-    label =  new char [strlen(label_) + 1];
-    strcpy(label, label_);
-};
+Circle::Circle(int id, int x, int y, int radius, const char* label_): Figure(id, x, y), radius(radius), label(label_) {}
 
-Circle::~Circle() {
-    delete[] label;
-}
+Circle::~Circle() = default;
 
 void Circle::print() const {
     Figure::print();
@@ -30,5 +23,5 @@ void Circle::zoom(int factor) {
 }
 
 const char* Circle::get_name() const {
-    return "Circle";
+    return NAME;
 }

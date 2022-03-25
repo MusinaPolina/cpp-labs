@@ -3,7 +3,7 @@
 
 using std::size_t;
 
-Scheme::Scheme(int capacity) {
+Scheme::Scheme(size_t capacity) {
     capacity_ = capacity;
     size_ = 0;
     figures_ = new Figure* [capacity_];
@@ -35,6 +35,7 @@ static size_t index_by_id(Figure** figures_, std::size_t size_, int id) {
 void Scheme::remove_figure(int id) {
     size_t ind = index_by_id(figures_, size_, id);
     if (ind < size_) {
+        assert(figures_[ind] != nullptr);
         delete figures_[ind];
         for (size_t i = ind + 1; i < size_; i++) {
             figures_[i - 1] = figures_[i];

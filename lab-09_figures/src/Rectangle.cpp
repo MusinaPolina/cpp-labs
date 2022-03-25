@@ -1,10 +1,9 @@
 #include <iostream>
 #include "Rectangle.hpp"
 
-Rectangle::Rectangle(int id, int x, int y, int width, int height): Figure(id, x, y),
-    width(width), height(height) {};
+Rectangle::Rectangle(int id, int x, int y, int width, int height): Figure(id, x, y), width(width), height(height) {}
 
-Rectangle::~Rectangle() {}
+Rectangle::~Rectangle() = default;
 
 void Rectangle::print() const {
     Figure::print();
@@ -21,5 +20,5 @@ void Rectangle::zoom(int factor) {
 }
 
 const char* Rectangle::get_name() const {
-    return "Rectangle";
+    return NAME;
 }

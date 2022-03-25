@@ -1,11 +1,10 @@
 #pragma once
 
-#include <cstdio>
 #include "Figure.hpp"
 
 class Scheme {
 public:
-    Scheme(int capacity); 
+    Scheme(std::size_t capacity);
     ~Scheme();
 
     void push_back_figure(Figure* fg);
@@ -17,7 +16,7 @@ public:
     void move(int id, int new_x, int new_y);
 
 private:
-    int capacity_;
+    std::size_t capacity_;
     std::size_t size_;
     Figure** figures_; // размер массива задается в конструкторе и больше не растет
 };

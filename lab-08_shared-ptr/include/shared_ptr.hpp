@@ -39,6 +39,8 @@ public:
     Matrix& operator*() const;
 
 private:
+    friend void updateStorage(shared_ptr &ptr, Matrix *obj);
+
     class Storage {
     public:
         Storage(Matrix* mtx);

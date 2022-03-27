@@ -1,9 +1,9 @@
 #include <iostream>
 #include "Rectangle.hpp"
 
-Rectangle::Rectangle(int id, int x, int y, int width, int height): Figure(id, x, y), width(width), height(height) {}
+Rectangle::Rectangle(int id, int x, int y, int width, int height): Figure(id, x, y), width(width), height(height) {};
 
-Rectangle::~Rectangle() = default;
+const char *Rectangle::NAME = "Rectangle";
 
 void Rectangle::print() const {
     Figure::print();

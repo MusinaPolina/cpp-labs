@@ -1,9 +1,9 @@
 #include <iostream>
 #include "Circle.hpp"
 
-Circle::Circle(int id, int x, int y, int radius, const char* label_): Figure(id, x, y), radius(radius), label(label_) {}
+Circle::Circle(int id, int x, int y, int radius, const std::string &label_): Figure(id, x, y), radius(radius), label(label_) {};
 
-Circle::~Circle() = default;
+const char *Circle::NAME = "Circle";
 
 void Circle::print() const {
     Figure::print();

@@ -4,8 +4,8 @@
 
 class Circle : public Figure {
 public:
-    Circle(int id, int x, int y, int radius, const char* label);
-    ~Circle() override;
+    Circle(int id, int x, int y, int radius, const std::string &label);
+    ~Circle() override = default;
 
     void print() const override;
     bool is_inside(int x, int y) const override;
@@ -16,5 +16,5 @@ public:
 private:
     int radius;
     std::string label;
-    const char* NAME = "Circle";
+    static const char *NAME;
 };

@@ -1,15 +1,20 @@
 #include <cstring>
 #include <cassert>
+#include <fstream>
 #include "employees.h"
 
-Employee::Employee(char *name, int32_t base_salary): _base_salary(base_salary) {
+Employee::Employee() {
+    _name = new char[NAME_SIZE];
+}
+
+Employee::Employee(const char *name, int32_t base_salary): _base_salary(base_salary) {
     size_t len = strlen(name) + 1;
     _name = new char[len + 1];
     strncpy(_name, name, len);
 }
 
 Employee::~Employee() {
-    delete _name;
+    delete[] _name;
 }
 
 std::ostream& operator<<(std::ostream &os, const Employee &emp) {
@@ -22,7 +27,17 @@ std::istream& operator>>(std::istream &is, Employee &emp) {
     return is;
 }
 
-Developer::Developer(char *name, int32_t base_salary, bool has_bonus):
+std::ofstream& operator<<(std::ofstream &os, const Employee &emp) {
+    emp.outputf(os);
+    return os ;
+}
+
+std::ifstream& operator>>(std::ifstream &is, Employee &emp) {
+    emp.inputf(is);
+    return is;
+}
+
+Developer::Developer(const char *name, int32_t base_salary, bool has_bonus):
     Employee(name, base_salary), _has_bonus(has_bonus) {}
 
 int Developer::salary() const {
@@ -41,6 +56,14 @@ void Developer::input(std::istream &is) {
     is >> *this;
 }
 
+void Developer::outputf(std::ofstream &os) const {
+    os << *this;
+}
+
+void Developer::inputf(std::ifstream &is) {
+    is >> *this;
+}
+
 std::ostream& operator<<(std::ostream &os, const Developer &dev) {
     os << "Developer\nName: " << dev._name << "\nBase Salary: " << dev._base_salary << "\n";
     os << "Has bonus: " << (dev._has_bonus ? "+" : "-");
@@ -48,11 +71,25 @@ std::ostream& operator<<(std::ostream &os, const Developer &dev) {
 }
 
 std::istream& operator>>(std::istream &is, Developer &dev) {
-    dev._name =
-    return is >> dev._name >> dev._base_salary >> dev._has_bonus;
+    dev._name = new char[dev.NAME_SIZE];
+    is >> dev._name >> dev._base_salary >> dev._has_bonus;
+    return is;
 }
 
-SalesManager::SalesManager(char *name, int32_t base_salary, int32_t sold_nm, int32_t price):
+std::ofstream& operator<<(std::ofstream &os, const Developer &dev) {
+    os << write_le_int32(1);
+    os << write_c_str(dev._name) << write_le_int32(dev._base_salary);
+    os << write_bool(dev._has_bonus);
+    return os;
+}
+
+std::ifstream& operator>>(std::ifstream &is, Developer &dev) {
+    is >> read_c_str(dev._name, dev.NAME_SIZE) >> read_le_int32(dev._base_salary);
+    is >> read_bool(dev._has_bonus);
+    return is;
+}
+
+SalesManager::SalesManager(const char *name, int32_t base_salary, int32_t sold_nm, int32_t price):
     Employee(name, base_salary), _sold_nm(sold_nm), _price(price) {}
 
 int SalesManager::salary() const {
@@ -69,6 +106,14 @@ void SalesManager::input(std::istream &is) {
     is >> *this;
 }
 
+void SalesManager::outputf(std::ofstream& os) const {
+    os << *this;
+}
+
+void SalesManager::inputf(std::ifstream &is) {
+    is >> *this;
+}
+
 std::ostream& operator<<(std::ostream &os, const SalesManager &sMan) {
     os << "Sales Manager\nName: " << sMan._name << "\nBase Salary: " << sMan._base_salary << "\n";
     os << "Sold items: " << sMan._sold_nm << "\nItem price: " << sMan._price;
@@ -76,21 +121,69 @@ std::ostream& operator<<(std::ostream &os, const SalesManager &sMan) {
 }
 
 std::istream& operator>>(std::istream &is, SalesManager &sMan) {
-    return is >> sMan._name >> sMan._base_salary >> sMan._price;
+    sMan._name = new char[sMan.NAME_SIZE];
+    return is >> sMan._name >> sMan._base_salary >> sMan._sold_nm >> sMan._price;
 }
 
+std::ofstream& operator<<(std::ofstream &os, const SalesManager &sMan) {
+    os << write_le_int32(2);
+    os << write_c_str(sMan._name) << write_le_int32(sMan._base_salary);
+    os << write_le_int32(sMan._sold_nm) << write_le_int32(sMan._price);
+    return os ;
+}
 
-std::ostream& operator<<(std::ostream & os, const EmployeesArray &array) {
-    for (auto employee: array._employees) {
-        os << *employee << '\n';
+std::ifstream& operator>>(std::ifstream &is, SalesManager &sMan) {
+    is >> read_c_str(sMan._name, sMan.NAME_SIZE) >> read_le_int32(sMan._base_salary);
+    is >> read_le_int32(sMan._sold_nm) >> read_le_int32(sMan._price);
+    return is;
+}
+
+EmployeesArray::~EmployeesArray() {
+    for (auto employee: _employees) {
+        delete employee;
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const EmployeesArray &array) {
+    for (size_t i = 0; i < array._employees.size(); i++) {
+        os << i + 1 << ". ";
+        os << *array._employees[i];
+        os << '\n';
     }
     os << "== Total salary: " << array.total_salary() << '\n';
     return os ;
 }
 
+std::ofstream& operator<<(std::ofstream &os, const EmployeesArray &array) {
+    os << write_le_int32(array._employees.size());
+    for (auto employee: array._employees) {
+        os << *employee;
+    }
+    return os;
+}
+
+std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array) {
+    int32_t sz;
+    is >> read_le_int32(sz);
+    for (int32_t i = 0; i < sz; i++) {
+        int32_t type;
+        is >> read_le_int32(type);
+        if (type == 1) {
+            Developer *dev = new Developer;
+            is >> *dev;
+            array.add(dev);
+        } else if (type == 2) {
+            SalesManager *sMan = new SalesManager;
+            is >> *sMan;
+            array.add(sMan);
+        }
+    }
+    return is;
+}
+
 void EmployeesArray::add(const Employee *e) {
     assert(e != nullptr);
-    _employees.push_back(const_cast<Employee *>(e));
+    _employees.push_back(e);
 }
 
 int EmployeesArray::total_salary() const {

@@ -38,7 +38,14 @@ std::ifstream& operator>>(std::ifstream &is, Employee &emp) {
 }
 
 Developer::Developer(const char *name, int32_t base_salary, bool has_bonus):
-    Employee(name, base_salary), _has_bonus(has_bonus) {}
+    Employee(name, base_salary), _has_bonus(has_bonus) {};
+
+Developer::Developer(const Developer &dev):
+    Developer(dev._name, dev._base_salary, dev._has_bonus) {};
+
+Developer* Developer::clone() const {
+    return new Developer(*this);
+}
 
 int Developer::salary() const {
     int salary = _base_salary;
@@ -71,7 +78,6 @@ std::ostream& operator<<(std::ostream &os, const Developer &dev) {
 }
 
 std::istream& operator>>(std::istream &is, Developer &dev) {
-    dev._name = new char[dev.NAME_SIZE];
     is >> dev._name >> dev._base_salary >> dev._has_bonus;
     return is;
 }
@@ -90,7 +96,14 @@ std::ifstream& operator>>(std::ifstream &is, Developer &dev) {
 }
 
 SalesManager::SalesManager(const char *name, int32_t base_salary, int32_t sold_nm, int32_t price):
-    Employee(name, base_salary), _sold_nm(sold_nm), _price(price) {}
+    Employee(name, base_salary), _sold_nm(sold_nm), _price(price) {};
+
+SalesManager::SalesManager(const SalesManager & sMan):
+    SalesManager(sMan._name, sMan._base_salary, sMan._sold_nm, sMan._price) {};
+
+SalesManager* SalesManager::clone() const {
+    return new SalesManager(*this);
+}
 
 int SalesManager::salary() const {
     return _base_salary + _sold_nm * _price * 0.01;
@@ -121,7 +134,6 @@ std::ostream& operator<<(std::ostream &os, const SalesManager &sMan) {
 }
 
 std::istream& operator>>(std::istream &is, SalesManager &sMan) {
-    sMan._name = new char[sMan.NAME_SIZE];
     return is >> sMan._name >> sMan._base_salary >> sMan._sold_nm >> sMan._price;
 }
 
@@ -181,9 +193,9 @@ std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array) {
     return is;
 }
 
-void EmployeesArray::add(const Employee *e) {
-    assert(e != nullptr);
-    _employees.push_back(e);
+void EmployeesArray::add(const Employee *emp) {
+    assert(emp != nullptr);
+    _employees.push_back(emp->clone());
 }
 
 int EmployeesArray::total_salary() const {

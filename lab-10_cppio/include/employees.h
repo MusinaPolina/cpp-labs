@@ -9,9 +9,12 @@ class Employee {
 public:
     Employee();
     Employee(const char *name, int32_t base_salary);
-    ~Employee();
+    Employee(const Employee &emp) = delete;
+    virtual ~Employee();
 
-    virtual int salary() const = 0;
+    virtual Employee* clone() const = 0;
+
+    [[nodiscard]] virtual int salary() const = 0;
 
     virtual const Employee* operator*() const = 0;
 
@@ -37,7 +40,10 @@ class Developer: public Employee {
 public:
     Developer() = default;
     Developer(const char *name, int32_t base_salary, bool has_bonus);
-    ~Developer() = default;
+    Developer(const Developer &dev);
+    ~Developer() =default;
+
+    Developer* clone() const override;
 
     [[nodiscard]] int salary() const override;
 
@@ -63,7 +69,10 @@ class SalesManager: public Employee {
 public:
     SalesManager() = default;
     SalesManager(const char *name, int32_t base_salary, int32_t sold_nm, int32_t price);
+    SalesManager(const SalesManager &sMan);
     ~SalesManager()  = default;
+
+    SalesManager* clone() const override;
 
     [[nodiscard]] int salary() const override;
 
@@ -99,5 +108,5 @@ public:
     friend std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array);
 
 private:
-    std::vector <const Employee*> _employees;
+    std::vector <Employee*> _employees;
 };

@@ -30,7 +30,7 @@ Matrix* shared_ptr::Storage::getObject() const {
     return data_;
 }
 
-void updateStorage(shared_ptr &ptr, Matrix *obj) {
+static void updateStorage(shared_ptr &ptr, Matrix *obj) {
     ptr.storage_ = nullptr;
     if (obj) {
         ptr.storage_ = new shared_ptr::Storage(obj);
@@ -47,9 +47,9 @@ shared_ptr::~shared_ptr() {
     }
 }
 
-shared_ptr::shared_ptr(const shared_ptr& other): shared_ptr(nullptr) {
-    if (other.storage_) {
-        storage_ = other.storage_;
+shared_ptr::shared_ptr(const shared_ptr& other) {
+    storage_ = other.storage_;
+    if (storage_) {
         storage_->incr();
     }
 }

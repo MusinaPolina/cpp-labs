@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <iostream>
 #include <vector>
 #include "bin_manip.h"
@@ -10,7 +10,7 @@ public:
     Employee() = default;
     Employee(std::string name, int32_t base_salary);
     Employee(const Employee &emp) = delete;
-    virtual ~Employee();
+    virtual ~Employee() = default;
 
     [[nodiscard]] virtual Employee* clone() const = 0;
 
@@ -25,6 +25,9 @@ public:
     friend std::ifstream& operator>>(std::ifstream &is, Employee &employee);
 
 protected:
+    void base_outputf(std::ostream& os) const;
+    void base_inputf(std::istream& is);
+
     virtual void output(std::ostream& os) const = 0;
     virtual void input(std::istream& is) = 0;
 
@@ -33,7 +36,7 @@ protected:
 
     std::string _name;
     int32_t _base_salary;
-
+    static const size_t NAME_SIZE = 101;
 };
 
 class Developer: public Employee {
@@ -70,7 +73,7 @@ public:
     SalesManager() = default;
     SalesManager(std::string name, int32_t base_salary, int32_t sold_nm, int32_t price);
     SalesManager(const SalesManager &sMan);
-    ~SalesManager()  override = default;
+    ~SalesManager() override = default;
 
     [[nodiscard]] SalesManager* clone() const override;
 
@@ -108,5 +111,5 @@ public:
     friend std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array);
 
 private:
-    std::vector <Employee*> _employees;
+    std::vector<Employee*> _employees;
 };

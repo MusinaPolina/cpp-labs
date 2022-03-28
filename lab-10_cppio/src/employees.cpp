@@ -25,6 +25,17 @@ std::ifstream& operator>>(std::ifstream &is, Employee &emp) {
     return is;
 }
 
+void Employee::base_outputf(std::ostream& os) const {
+    os << write_c_str(_name.c_str()) << write_le_int32(_base_salary);
+}
+
+void Employee::base_inputf(std::istream& is) {
+    char *name = new char[NAME_SIZE];
+    is >> read_c_str(name, NAME_SIZE) >> read_le_int32(_base_salary);
+    _name = name;
+    delete[] name;
+}
+
 Developer::Developer(std::string name, int32_t base_salary, bool has_bonus):
     Employee(name, base_salary), _has_bonus(has_bonus) {};
 
@@ -72,13 +83,13 @@ std::istream& operator>>(std::istream &is, Developer &dev) {
 
 std::ofstream& operator<<(std::ofstream &os, const Developer &dev) {
     os << write_le_int32(1);
-    os << write_c_str(dev._name) << write_le_int32(dev._base_salary);
+    dev.base_outputf(os);
     os << write_bool(dev._has_bonus);
     return os;
 }
 
 std::ifstream& operator>>(std::ifstream &is, Developer &dev) {
-    is >> read_c_str(dev._name, dev.NAME_SIZE) >> read_le_int32(dev._base_salary);
+    dev.base_inputf(is);
     is >> read_bool(dev._has_bonus);
     return is;
 }
@@ -127,13 +138,13 @@ std::istream& operator>>(std::istream &is, SalesManager &sMan) {
 
 std::ofstream& operator<<(std::ofstream &os, const SalesManager &sMan) {
     os << write_le_int32(2);
-    os << write_c_str(sMan._name) << write_le_int32(sMan._base_salary);
+    sMan.base_outputf(os);
     os << write_le_int32(sMan._sold_nm) << write_le_int32(sMan._price);
     return os ;
 }
 
 std::ifstream& operator>>(std::ifstream &is, SalesManager &sMan) {
-    is >> read_c_str(sMan._name, sMan.NAME_SIZE) >> read_le_int32(sMan._base_salary);
+    sMan.base_inputf(is);
     is >> read_le_int32(sMan._sold_nm) >> read_le_int32(sMan._price);
     return is;
 }

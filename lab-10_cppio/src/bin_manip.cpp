@@ -58,6 +58,6 @@ std::istream &operator>>(std::istream &is, BinManipulatorCharIn manip) {
     return is;
 }
 
-BinManipulatorCharOut write_c_str(const char* s) { return BinManipulatorCharOut(s, strlen(s)); }
-BinManipulatorCharIn read_c_str(char* s, size_t sz) { return BinManipulatorCharIn(s, sz); }
+BinManipulatorCharOut write_c_str(const char* s) { return {s, strlen(s)}; }
+BinManipulatorCharIn read_c_str(char* s, size_t sz) { return {s, sz}; }
 

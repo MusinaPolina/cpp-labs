@@ -3,80 +3,95 @@
 #include <cstdint>
 #include <iostream>
 
-    class BinManipulatorIntOut {
+namespace BinManipulator {
+    class IntOut {
     private:
-        explicit BinManipulatorIntOut(const int32_t &x);
+        explicit IntOut(const int32_t &x);
+
         const int32_t &x;
 
     public:
-        friend std::ostream &operator<<(std::ostream &os, BinManipulatorIntOut manip);
+        friend std::ostream &operator<<(std::ostream &os, IntOut manip);
 
-        friend BinManipulatorIntOut write_le_int32(const int32_t &x);
+        friend IntOut write_le_int32(const int32_t &x);
     };
 
-    class BinManipulatorIntIn {
+    class IntIn {
     private:
-        explicit BinManipulatorIntIn(int32_t &x);
+        explicit IntIn(int32_t &x);
+
         int32_t &x;
 
     public:
-        friend std::istream &operator>>(std::istream &is, BinManipulatorIntIn manip);
+        friend std::istream &operator>>(std::istream &is, IntIn manip);
 
-        friend BinManipulatorIntIn read_le_int32(int32_t &x);
+        friend IntIn read_le_int32(int32_t &x);
     };
 
-    BinManipulatorIntOut write_le_int32(const int32_t &x);
-    BinManipulatorIntIn read_le_int32(int32_t &x);
+    std::ostream &operator<<(std::ostream &os, IntOut manip);
+    std::istream &operator>>(std::istream &is, IntIn manip);
+    IntOut write_le_int32(const int32_t &x);
+    IntIn read_le_int32(int32_t &x);
 
-    class BinManipulatorBoolOut {
+
+    class BoolOut {
     private:
-        explicit BinManipulatorBoolOut(const bool &x);
-        const bool &x;
+        explicit BoolOut(bool x);
+
+        bool x;
 
     public:
-        friend std::ostream &operator<<(std::ostream &os, BinManipulatorBoolOut manip);
+        friend std::ostream &operator<<(std::ostream &os, BoolOut manip);
 
-        friend BinManipulatorBoolOut write_bool(const bool &x);
+        friend BoolOut write_bool(bool x);
     };
 
-    class BinManipulatorBoolIn {
+    class BoolIn {
     private:
-        explicit BinManipulatorBoolIn(bool &x);
+        explicit BoolIn(bool &x);
+
         bool &x;
 
     public:
-        friend std::istream &operator>>(std::istream &is, BinManipulatorBoolIn manip);
+        friend std::istream &operator>>(std::istream &is, BoolIn manip);
 
-        friend BinManipulatorBoolIn read_bool(bool &x);
+        friend BoolIn read_bool(bool &x);
     };
 
+    std::ostream &operator<<(std::ostream &os, BoolOut manip);
+    std::istream &operator>>(std::istream &is, BoolIn manip);
+    BoolOut write_bool(bool x);
+    BoolIn read_bool(bool &x);
 
-    BinManipulatorBoolOut write_bool(const bool &x);
-    BinManipulatorBoolIn read_bool(bool &x);
 
-    class BinManipulatorCharOut {
+    class CharOut {
     private:
-        BinManipulatorCharOut(const char *s, size_t);
+        explicit CharOut(const char *s, size_t);
+
         const char *s;
         size_t sz;
 
     public:
-        friend std::ostream &operator<<(std::ostream &os, BinManipulatorCharOut manip);
+        friend std::ostream &operator<<(std::ostream &os, CharOut manip);
 
-        friend BinManipulatorCharOut write_c_str(const char *s);
+        friend CharOut write_c_str(const char *s);
     };
 
-    class BinManipulatorCharIn {
+    class CharIn {
     private:
-        BinManipulatorCharIn(char *s, size_t);
+        explicit CharIn(char *s, size_t);
+
         char *s;
         size_t sz;
 
     public:
-        friend std::istream &operator>>(std::istream &is, BinManipulatorCharIn manip);
+        friend std::istream &operator>>(std::istream &is, CharIn manip);
 
-        friend BinManipulatorCharIn read_c_str(char *s, size_t sz);
+        friend CharIn read_c_str(char *s, size_t sz);
     };
 
-    BinManipulatorCharOut write_c_str(const char *s);
-    BinManipulatorCharIn read_c_str(char *s, size_t sz);
+    std::ostream &operator<<(std::ostream &os, CharOut manip);
+    std::istream &operator>>(std::istream &is, CharIn manip);
+    CharOut write_c_str(const char *s);
+    CharIn read_c_str(char *s, size_t sz);
+}

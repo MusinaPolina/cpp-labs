@@ -1,11 +1,7 @@
 #include <iostream>
-#include <sstream>
-#include <cstring>
-#include <cassert>
 #include <fstream>
 #include <iomanip>
 #include "employees.h"
-#include "bin_manip.h"
 
 int main(int , char**) {
     std::string cmd;
@@ -31,11 +27,11 @@ int main(int , char**) {
             int type;
             std::cin >> type;
             if (type == 1) {
-                Developer *dev = new Developer;
+                auto *dev = new Developer;
                 std::cin >> *dev;
                 array.add(dev);
             } else if (type == 2) {
-                SalesManager *sMan = new SalesManager;
+                auto *sMan = new SalesManager;
                 std::cin >> *sMan;
                 array.add(sMan);
             }

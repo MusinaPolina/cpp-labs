@@ -12,8 +12,6 @@ public:
     Employee(const Employee &emp) = delete;
     virtual ~Employee() = default;
 
-    [[nodiscard]] virtual Employee* clone() const = 0;
-
     [[nodiscard]] virtual int salary() const = 0;
 
     virtual const Employee* operator*() const = 0;
@@ -46,8 +44,6 @@ public:
     Developer(const Developer &dev);
     ~Developer() override =default;
 
-    [[nodiscard]] Developer* clone() const override;
-
     [[nodiscard]] int salary() const override;
 
     const Developer* operator*() const override;
@@ -74,8 +70,6 @@ public:
     SalesManager(std::string name, int32_t base_salary, int32_t sold_nm, int32_t price);
     SalesManager(const SalesManager &sMan);
     ~SalesManager() override = default;
-
-    [[nodiscard]] SalesManager* clone() const override;
 
     [[nodiscard]] int salary() const override;
 

@@ -7,12 +7,12 @@
 
 class Employee {
 public:
-    Employee();
-    Employee(const char *name, int32_t base_salary);
+    Employee() = default;
+    Employee(std::string name, int32_t base_salary);
     Employee(const Employee &emp) = delete;
     virtual ~Employee();
 
-    virtual Employee* clone() const = 0;
+    [[nodiscard]] virtual Employee* clone() const = 0;
 
     [[nodiscard]] virtual int salary() const = 0;
 
@@ -31,19 +31,19 @@ protected:
     virtual void outputf(std::ofstream& os) const = 0;
     virtual void inputf(std::ifstream& is) = 0;
 
-    char *_name;
-    static const size_t NAME_SIZE = 101;
+    std::string _name;
     int32_t _base_salary;
+
 };
 
 class Developer: public Employee {
 public:
     Developer() = default;
-    Developer(const char *name, int32_t base_salary, bool has_bonus);
+    Developer(std::string name, int32_t base_salary, bool has_bonus);
     Developer(const Developer &dev);
-    ~Developer() =default;
+    ~Developer() override =default;
 
-    Developer* clone() const override;
+    [[nodiscard]] Developer* clone() const override;
 
     [[nodiscard]] int salary() const override;
 
@@ -68,11 +68,11 @@ protected:
 class SalesManager: public Employee {
 public:
     SalesManager() = default;
-    SalesManager(const char *name, int32_t base_salary, int32_t sold_nm, int32_t price);
+    SalesManager(std::string name, int32_t base_salary, int32_t sold_nm, int32_t price);
     SalesManager(const SalesManager &sMan);
-    ~SalesManager()  = default;
+    ~SalesManager()  override = default;
 
-    SalesManager* clone() const override;
+    [[nodiscard]] SalesManager* clone() const override;
 
     [[nodiscard]] int salary() const override;
 

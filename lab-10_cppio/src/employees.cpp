@@ -3,19 +3,7 @@
 #include <fstream>
 #include "employees.h"
 
-Employee::Employee() {
-    _name = new char[NAME_SIZE];
-}
-
-Employee::Employee(const char *name, int32_t base_salary): _base_salary(base_salary) {
-    size_t len = strlen(name) + 1;
-    _name = new char[len + 1];
-    strncpy(_name, name, len);
-}
-
-Employee::~Employee() {
-    delete[] _name;
-}
+Employee::Employee(std::string name, int32_t base_salary): _name(name), _base_salary(base_salary) {};
 
 std::ostream& operator<<(std::ostream &os, const Employee &emp) {
     emp.output(os);
@@ -37,7 +25,7 @@ std::ifstream& operator>>(std::ifstream &is, Employee &emp) {
     return is;
 }
 
-Developer::Developer(const char *name, int32_t base_salary, bool has_bonus):
+Developer::Developer(std::string name, int32_t base_salary, bool has_bonus):
     Employee(name, base_salary), _has_bonus(has_bonus) {};
 
 Developer::Developer(const Developer &dev):
@@ -95,7 +83,7 @@ std::ifstream& operator>>(std::ifstream &is, Developer &dev) {
     return is;
 }
 
-SalesManager::SalesManager(const char *name, int32_t base_salary, int32_t sold_nm, int32_t price):
+SalesManager::SalesManager(std::string name, int32_t base_salary, int32_t sold_nm, int32_t price):
     Employee(name, base_salary), _sold_nm(sold_nm), _price(price) {};
 
 SalesManager::SalesManager(const SalesManager & sMan):

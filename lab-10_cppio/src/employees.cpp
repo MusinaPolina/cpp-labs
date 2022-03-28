@@ -180,13 +180,13 @@ std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array) {
         int32_t type;
         is >> read_le_int32(type);
         if (type == 1) {
-            Developer dev;
-            is >> dev;
-            array.add(*dev);
+            Developer *dev = new Developer;
+            is >> *dev;
+            array.add(dev);
         } else if (type == 2) {
-            SalesManager sMan;
-            is >> sMan;
-            array.add(*sMan);
+            SalesManager *sMan = new SalesManager;
+            is >> *sMan;
+            array.add(sMan);
         }
     }
     return is;
@@ -194,7 +194,7 @@ std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array) {
 
 void EmployeesArray::add(const Employee *emp) {
     assert(emp != nullptr);
-    _employees.push_back(emp->clone());
+    _employees.push_back(emp);
 }
 
 int EmployeesArray::total_salary() const {

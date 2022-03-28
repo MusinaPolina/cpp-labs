@@ -111,5 +111,5 @@ public:
     friend std::ifstream& operator>>(std::ifstream &is, EmployeesArray &array);
 
 private:
-    std::vector<Employee*> _employees;
+    std::vector<const Employee*> _employees;
 };

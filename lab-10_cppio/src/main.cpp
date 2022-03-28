@@ -31,13 +31,13 @@ int main(int , char**) {
             int type;
             std::cin >> type;
             if (type == 1) {
-                Developer dev;
-                std::cin >> dev;
-                array.add(*dev);
+                Developer *dev = new Developer;
+                std::cin >> *dev;
+                array.add(dev);
             } else if (type == 2) {
-                SalesManager sMan;
-                std::cin >> sMan;
-                array.add(*sMan);
+                SalesManager *sMan = new SalesManager;
+                std::cin >> *sMan;
+                array.add(sMan);
             }
         } else if (cmd == "list") {
             std::cout << array << '\n';

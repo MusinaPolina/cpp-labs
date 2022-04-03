@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 #include "my_vector.hpp"
+#include <iosfwd>
 
 namespace containers {
 
@@ -133,7 +134,8 @@ namespace containers {
             os << v.array_[0];
         }
         for (std::size_t i = 1; i < v.size_; i++) {
-            os << ' ' << v.array_[i];
+            os << ' ';
+            os << v.array_[i];
         }
         return os;
     }

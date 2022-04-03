@@ -92,8 +92,8 @@ namespace containers {
             copy[i] = array_[i];
             array_[i].~T();
         }
-        delete[] reinterpret_cast<char * >(array_);
-        array_ = copy;
+        std::swap(array_, copy);
+        delete[] reinterpret_cast<char * >(copy);
     }
 
     template<typename T>
@@ -117,7 +117,7 @@ namespace containers {
     template<typename T>
     void my_vector<T>:: pop_back() {
         assert(size_);
-        array_[size_--].~T();
+        array_[--size_].~T();
     }
 
     template<typename T>

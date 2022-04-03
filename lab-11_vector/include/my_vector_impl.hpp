@@ -16,7 +16,7 @@ namespace containers {
     }
 
     static std::size_t round_to_power_of_2(std::size_t n) {
-        std::size_t p = 0;
+        std::size_t p = 1;
         while ((1 << p) < n) {
             p++;
         }
@@ -111,7 +111,7 @@ namespace containers {
     }
 
     template<typename T>
-    void my_vector<T>::push_back(T t) {
+    void my_vector<T>::push_back(const T &t) {
         reserve(size_ + 1);
         new(&array_[size_++]) T(t);
     }

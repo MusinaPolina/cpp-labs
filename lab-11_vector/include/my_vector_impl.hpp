@@ -112,10 +112,7 @@ namespace containers {
 
     template<typename T>
     void my_vector<T>::push_back(T t) {
-        if (size_ == capacity_) {
-            reserve(capacity_ * 2);
-        }
-        assert(size_ < capacity_);
+        reserve(size_ + 1);
         new(&array_[size_++]) T(t);
     }
 

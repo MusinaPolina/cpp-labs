@@ -128,8 +128,11 @@ namespace containers {
 
     template<typename T>
     std::ostream & operator<<(std::ostream &os, const my_vector<T> &v) {
-        for (std::size_t i = 0; i < v.size_; i++) {
-            os << v.array_[i] << ' ';
+        if (v.size_) {
+            os << v.array_[0];
+        }
+        for (std::size_t i = 1; i < v.size_; i++) {
+            os << ' ' << v.array_[i];
         }
         return os;
     }

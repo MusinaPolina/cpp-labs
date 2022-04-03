@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm>
 #include "my_vector.hpp"
-#include <iosfwd>
+#include <iostream>
 
 namespace containers {
 

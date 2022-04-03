@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "my_vector.hpp"
 #include <iostream>
+#include <cstring>
 
 namespace containers {
 
@@ -38,7 +39,7 @@ namespace containers {
         size_ = other.size_;
         array_ = reinterpret_cast<T *>(new char[sizeof(T) * capacity_]);
         for (std::size_t i = 0; i < size_; i++) {
-            array_[i] = other.array_[i];
+            new(&array_[i]) T(other.array_[i]);
         }
     }
 
@@ -89,11 +90,11 @@ namespace containers {
         capacity_ = new_capacity;
         T* copy = reinterpret_cast<T *>(new char[sizeof(T) * capacity_]);
         for (std::size_t i = 0; i < size_; i++) {
-            copy[i] = array_[i];
+            new(&copy[i]) T(array_[i]);
             array_[i].~T();
         }
-        std::swap(array_, copy);
-        delete[] reinterpret_cast<char * >(copy);
+        delete[] reinterpret_cast<char * >(array_);
+        array_ = copy;
     }
 
     template<typename T>
@@ -111,7 +112,8 @@ namespace containers {
         if (size_ == capacity_) {
             reserve(capacity_ * 2);
         }
-        array_[size_++] = t;
+        assert(size_ < capacity_);
+        new(&array_[size_++]) T(t);
     }
 
     template<typename T>

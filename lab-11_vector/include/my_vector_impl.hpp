@@ -78,6 +78,9 @@ namespace containers {
         for (std::size_t i = size_; i < n; i++) {
             new(&array_[i]) T();
         }
+        for (std::size_t i = n; i < size_; i++) {
+            array_[i].~T();
+        }
         size_ = n;
     }
 

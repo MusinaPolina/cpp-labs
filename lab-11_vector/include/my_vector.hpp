@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-
+#include <iosfwd>
 namespace containers {
 
 template<typename T>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <algorithm>
 #include "my_vector.hpp"
 
 namespace containers {

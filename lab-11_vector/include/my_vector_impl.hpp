@@ -16,7 +16,7 @@ namespace containers {
     }
 
     static std::size_t round_to_power_of_2(std::size_t n) {
-        std::size_t p = 1;
+        std::size_t p = 0;
         while ((1 << p) < n) {
             p++;
         }

@@ -6,34 +6,47 @@
 #include <iostream>
 
 class MatrixException: public std::exception {
+public:
     [[nodiscard]] virtual const char* what() const noexcept = 0;
 };
 
-class UnableOpenFileException: MatrixException {
+class BadAllocException: public MatrixException {
+public:
+    [[nodiscard]] const char* what() const noexcept override{
+        return "Unable to allocate memory.";
+    }
+};
+
+class UnableOpenFileException: public MatrixException {
+public:
     [[nodiscard]] const char* what() const noexcept override{
         return "LOAD: unable to open file.";
     }
 };
 
-class InvalidFileFormatException: MatrixException {
+class InvalidFileFormatException: public MatrixException {
+public:
     [[nodiscard]] const char* what() const noexcept override{
         return "LOAD: invalid file format.";
     }
 };
 
-class AddException: MatrixException {
+class AddException: public MatrixException {
+public:
     [[nodiscard]] const char* what() const noexcept override{
         return "ADD: dimensions do not match.";
     }
 };
 
-class MulException: MatrixException {
+class MulException: public MatrixException {
+public:
     [[nodiscard]] const char* what() const noexcept override{
         return "MUL: #arg1.columns != #arg2.rows.";
     }
 };
 
-class AccessException: MatrixException {
+class AccessException: public MatrixException {
+public:
     [[nodiscard]] const char* what() const noexcept override{
         return "ACCESS: bad index.";
     }

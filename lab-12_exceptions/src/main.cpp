@@ -26,10 +26,10 @@ int main(int argc, char* argv[]) {
                 std::cin >> reg;
                 std::cout << regs[reg_to_int(reg)];
             } else if (cmd == "add") {
-                size_t oth;
+                std::string oth;
                 std::cin >> reg >> oth;
                 try {
-                regs[reg_to_int(reg)] += regs[oth];
+                    regs[reg_to_int(reg)] += regs[reg_to_int(oth)];
                 } catch (const AddException& e){
                     std::cout << e.what() << std::endl;
                 }

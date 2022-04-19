@@ -49,7 +49,7 @@ Matrix& Matrix::operator=(Matrix m) {
     return *this;
 }
 
-Matrix Matrix::operator+=(const Matrix &a) {
+Matrix Matrix::operator+=(Matrix a) {
     if (rows() != a.rows() || cols() != a.cols()) throw AddException();
 
     for (size_t r = 0; r < rows(); r++)

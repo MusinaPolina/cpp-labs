@@ -61,7 +61,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, const Matrix& m);
 
-    Matrix operator+=(const Matrix &a);
+    Matrix operator+=(Matrix a);
     Matrix operator*=(const Matrix &a);
     Matrix& operator=(Matrix m);
 

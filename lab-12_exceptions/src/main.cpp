@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
                 size_t row, col;
                 std::cin >> reg >> row >> col;
                 try {
-                    std::cout << regs[reg_to_int(reg)][row][col];
+                    std::cout << regs[reg_to_int(reg)][row][col] << std::endl;
                 } catch (const AccessException& e){
                     std::cout << e.what() << std::endl;
                 }

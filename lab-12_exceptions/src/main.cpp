@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
                 std::string oth;
                 std::cin >> reg >> oth;
                 try {
-                    regs[reg_to_int(reg)] += regs[reg_to_int(oth)];
+                    regs[reg_to_int(reg)] *= regs[reg_to_int(oth)];
                 } catch (const MulException& e){
                     std::cout << e.what() << std::endl;
                 }

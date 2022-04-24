@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <deque>
 #include <map>
 
 namespace Huffman {
@@ -23,10 +22,10 @@ namespace Huffman {
     class TreeNode {
     public:
         TreeNode(unsigned char c);
-        TreeNode(TreeNode *l, TreeNode *r);
+        TreeNode(int l, int r);
 
         unsigned char c = 0;
-        TreeNode *l = nullptr, *r = nullptr;
+        int l = -1, r = -1;
         bool is_leaf();
 
     private:
@@ -52,7 +51,7 @@ namespace Huffman {
     private:
         void build_code_by_char();
         void build_tree_by_ftable();
-        void build_code(TreeNode *v, std::vector<bool> code);
+        void build_code(TreeNode v, std::vector<bool> code);
 
         void build_tree_by_codes();
     };
@@ -66,13 +65,13 @@ namespace Huffman {
     private:
         std::map<unsigned char, int> get_ftable();
 
-        void put_code(std::ofstream &out, Huffman::Tree tree);
-        void put_compressed(std::ofstream &out, Huffman::Tree tree);
+        size_t put_code(std::ofstream &out, Huffman::Tree tree);
+        std::pair<size_t, size_t> put_compressed(std::ofstream &out, Huffman::Tree tree);
         void put_compressed_text(Huffman::Tree tree);
 
 
-        void put_text(Tree tree, size_t stream_lengths, std::ifstream &in);
-        std::vector<Huffman::NodeCode> get_code(std::ifstream &in);
+        size_t put_text(Tree tree, size_t stream_lengths, std::ifstream &in);
+        std::vector<Huffman::NodeCode> get_code(std::ifstream &in, size_t &size_of_code);
 
         std::string input_name, output_name;
     };

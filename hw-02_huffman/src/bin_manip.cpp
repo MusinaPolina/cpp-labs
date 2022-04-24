@@ -32,7 +32,7 @@ namespace BinManipulator {
     }
 
     std::istream &operator>>(std::istream &is, CharIn manip) {
-        is.read(reinterpret_cast<char *>(&manip.s), sizeof(manip.s));
+        manip.s = is.get();
         return is;
     }
 

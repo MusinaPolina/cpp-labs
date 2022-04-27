@@ -6,9 +6,12 @@ namespace DataProcessing {
     public:
         explicit Reader(std::istream& stream);
 
-        uint16_t readBits(size_t count);
+        uint8_t readBits(size_t count);
+        uint32_t readInt();
         bool canRead();
-        int32_t bytesExtracted();
+        uint32_t bytesExtracted();
+
+
     private:
         void ReadByte();
 

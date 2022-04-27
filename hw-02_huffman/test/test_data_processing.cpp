@@ -1,6 +1,6 @@
 #include "doctest.h"
+
 #include <iostream>
-#include <fstream>
 #include "reader.h"
 #include <climits>
 #include <writer.h>
@@ -12,30 +12,30 @@ namespace DataProcessing::Test {
         TEST_CASE("simple_a") {
             std::stringstream in;
             in << "a";
-            Reader dataReader(in);
-            CHECK_EQ(dataReader.readBits(CHAR_BIT), 'a');
+            Reader reader(in);
+            CHECK_EQ(reader.readBits(CHAR_BIT), 'a');
         }
 
         TEST_CASE("amount of extracted bytes") {
             std::stringstream in;
             in << "aaa";
 
-            Reader dataReader(in);
+            Reader reader(in);
             int count = 0;
-            while (dataReader.canRead()) {
-                CHECK_EQ(count++, dataReader.bytesExtracted());
-                dataReader.readBits(CHAR_BIT);
+            while (reader.canRead()) {
+                CHECK_EQ(count++, reader.bytesExtracted());
+                reader.readBits(CHAR_BIT);
             }
 
-            CHECK_EQ(3, dataReader.bytesExtracted());
+            CHECK_EQ(3, reader.bytesExtracted());
         }
 
-        TEST_CASE("empty_file") {
+        TEST_CASE("empty file") {
             std::stringstream in;
-            Reader dataReader(in);
+            Reader reader(in);
 
-            CHECK_EQ(false, dataReader.canRead());
-            CHECK_EQ(0, dataReader.bytesExtracted());
+            CHECK_EQ(false, reader.canRead());
+            CHECK_EQ(0, reader.bytesExtracted());
         }
     }
     TEST_SUITE("data_writer") {
@@ -93,6 +93,37 @@ namespace DataProcessing::Test {
             for (auto p : characters) {
                 CHECK_EQ(p.first, reader.readBits(p.second));
             }
+        }
+
+        TEST_CASE("combine int") {
+            std::stringstream s;
+            Writer writer(s);
+            Reader reader(s);
+
+            std::vector<uint32_t> ints = {4, 12, 43, 91, 4324232, 432, 123, 2, 0, 234, UINT32_MAX, 20};
+
+            for (auto i : ints) {
+                writer.writeInt(i);
+            }
+            writer.close();
+            for (auto i : ints) {
+                uint32_t j = reader.readInt();
+                CHECK_EQ(i, j);
+            }
+        }
+
+        TEST_CASE("combine int char") {
+            std::stringstream s;
+            Writer writer(s);
+            Reader reader(s);
+
+            writer.writeInt(10);
+            writer.write(0, CHAR_BIT);
+            writer.writeInt(1);
+
+            CHECK_EQ(10, reader.readInt());
+            CHECK_EQ(0, reader.readBits(CHAR_BIT));
+            CHECK_EQ(1, reader.readInt());
         }
     }
 }

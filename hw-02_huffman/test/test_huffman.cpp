@@ -2,12 +2,13 @@
 
 #include <iostream>
 #include <sstream>
+#include <filesystem>
 #include "archiver.h"
 #include "tree.h"
 #include "code.h"
 
 namespace Huffman::Test {
-    TEST_SUITE("archiver") {
+    TEST_SUITE("archiver functions") {
         TEST_CASE("buildFrequencyTable") {
             std::stringstream stream;
             std::string s = "a\\bs\n#$$$\n";
@@ -54,6 +55,68 @@ namespace Huffman::Test {
 
         TEST_CASE("compress") {
             //void compress(DataProcessing::Reader &reader, DataProcessing::Writer &writer, std::vector<Code> &codes);
+        }
+
+        TEST_CASE("readInfo") {
+            //
+        }
+    }
+
+    TEST_SUITE("archive - unarchive") {
+
+        void compareFile(const std::string& input, const std::string& output) {
+            std::ifstream a(input, std::ios::binary);
+            std::ifstream b(input, std::ios::binary);
+
+            DataProcessing::Reader f(a), s(b);
+
+            while (f.canRead() && s.canRead()) {
+                CHECK_EQ(f.readBit(), s.readBit());
+            }
+            CHECK_EQ(f.canRead(), s.canRead());
+        }
+
+        void testArchiver(const std::string& input, const std::string& output) {
+            const std::string archive = "../sample/test.bin";
+            {
+                Archiver archiver(input, archive);
+                archiver.archive();
+            }
+            {
+                Archiver unarchiver(archive, output);
+                unarchiver.unarchive();
+            }
+            compareFile(input, output);
+            std::filesystem::remove(output);
+        }
+
+        TEST_CASE("simple txt") {
+            testArchiver("../sample/test.in", "../sample/test.out");
+        }
+
+        TEST_CASE("UTF_8 txt") {
+            testArchiver("../sample/utf8.txt", "../sample/utf8.out");
+        }
+
+        TEST_CASE("png") {
+            testArchiver("../sample/img.png", "../sample/test.png");
+            testArchiver("../sample/img_1.png", "../sample/test.png");
+        }
+
+        TEST_CASE("jpg") {
+            testArchiver("../sample/jpg.jpg", "../sample/test.jpg");
+        }
+
+        TEST_CASE("big data") {
+            testArchiver("../sample/book.txt", "../sample/out.txt");
+        }
+
+        TEST_CASE("empty") {
+            testArchiver("../sample/empty.in", "../sample/empty.out");
+        }
+
+        TEST_CASE("pdf") {
+            testArchiver("../sample/Problem2.pdf", "../sample/out.pdf");
         }
     }
 }

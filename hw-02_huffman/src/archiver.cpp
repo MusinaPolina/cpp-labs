@@ -46,9 +46,13 @@ namespace Huffman {
         std::set<Code> sorted_codes(codes.begin(), codes.end());
         while (reader.canRead()) {
             uint8_t symbol = reader.readBits(CHAR_BIT);
-            Code code = *sorted_codes.find(Code(symbol));
+            auto code = sorted_codes.find(Code(symbol));
 
-            writer.writeBits(code.code_);
+            if (code == sorted_codes.end()) {
+                throw Exceptions::InvalidFileFormat(" unknown symbol during the second pass");
+            }
+
+            writer.writeBits((*code).code_);
         }
         writer.close();
     }

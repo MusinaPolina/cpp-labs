@@ -13,6 +13,7 @@ namespace Huffman {
     class Archiver {
     public:
         Archiver(const std::string& input_name, const std::string& output_name);
+
         void archive();
         void unarchive();
 

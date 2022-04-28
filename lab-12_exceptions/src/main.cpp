@@ -16,6 +16,8 @@ int main(int argc, char* argv[]) {
             std::cin >> reg >> fname;
             try {
                 regs[reg_to_int(reg)] = Container::Matrix::load(fname);
+            } catch (const std::bad_alloc& e) {
+                std::cout << "Unable to allocate memory." << std::endl;
             } catch (const std::exception& e){
                 std::cout << e.what() << std::endl;
             }
@@ -27,6 +29,8 @@ int main(int argc, char* argv[]) {
             std::cin >> reg >> oth;
             try {
                 regs[reg_to_int(reg)] += regs[reg_to_int(oth)];
+            } catch (const std::bad_alloc& e) {
+                std::cout << "Unable to allocate memory." << std::endl;
             } catch (const std::exception& e){
                 std::cout << e.what() << std::endl;
             }
@@ -35,6 +39,8 @@ int main(int argc, char* argv[]) {
             std::cin >> reg >> oth;
             try {
                 regs[reg_to_int(reg)] *= regs[reg_to_int(oth)];
+            } catch (const std::bad_alloc& e) {
+                std::cout << "Unable to allocate memory." << std::endl;
             } catch (const std::exception& e){
                 std::cout << e.what() << std::endl;
             }

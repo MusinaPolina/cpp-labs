@@ -29,6 +29,8 @@ public:
     template<typename S>
     friend std::ostream & operator<<(std::ostream &os, const my_vector<S> &v);
 
+    void swap(my_vector &other);
+
 private:
     size_t capacity_;
     size_t size_;

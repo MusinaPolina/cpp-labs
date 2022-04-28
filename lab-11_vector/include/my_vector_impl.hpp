@@ -34,26 +34,31 @@ namespace containers {
     }
 
     template<typename T>
+    void my_vector<T>::swap(my_vector <T> &other) {
+        std::swap(capacity_, other.capacity_);
+        std::swap(size_, other.size_);
+        std::swap(array_, other.array_);
+    }
+
+    template<typename T>
     my_vector<T>::my_vector(my_vector const &other) {
         capacity_ = other.capacity_;
         size_ = other.size_;
         array_ = reinterpret_cast<T *>(new char[sizeof(T) * capacity_]);
         for (std::size_t i = 0; i < size_; i++) {
-            new(&array_[i]) T(other.array_[i]);
+            new(&array_[i]) T(other[i]);
         }
     }
 
     template<typename T>
     my_vector<T> & my_vector<T>::operator=(my_vector other) {
-        std::swap(capacity_, other.capacity_);
-        std::swap(size_, other.size_);
-        std::swap(array_, other.array_);
+        swap(other);
         return *this;
     }
 
     template<typename T>
     my_vector<T>::~my_vector() {
-        this->clear();
+        clear();
         delete[] reinterpret_cast<char * >(array_);
     }
 
@@ -91,13 +96,8 @@ namespace containers {
             return;
         }
         capacity_ = new_capacity;
-        T* copy = reinterpret_cast<T *>(new char[sizeof(T) * capacity_]);
-        for (std::size_t i = 0; i < size_; i++) {
-            new(&copy[i]) T(array_[i]);
-            array_[i].~T();
-        }
-        delete[] reinterpret_cast<char * >(array_);
-        array_ = copy;
+        my_vector<T> other(*this);
+        swap(other);
     }
 
     template<typename T>

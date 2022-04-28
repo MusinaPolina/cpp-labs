@@ -97,6 +97,9 @@ namespace Huffman {
         while (!node->isLeaf()) {
             bool path = reader.readBit();
             node = path ? node->right_ : node->left_;
+            if (!node) {
+                throw Exceptions::InvalidFileFormat("incorrect compression of file");
+            }
         }
         return node->symbol_;
     }

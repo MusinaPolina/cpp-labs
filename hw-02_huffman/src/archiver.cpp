@@ -11,9 +11,10 @@ namespace Huffman {
 
     Archiver::Archiver(const std::string& input_name, const std::string& output_name) {
         input_ = std::ifstream(input_name, std::ios::binary);
-        if (input_.fail()) throw; // TODO();
+        if (input_.fail()) throw Exceptions::UnableOpenFile(input_name);
+
         output_ = std::ofstream(output_name, std::ios::binary);
-        if (output_.fail()) throw; //TODO();
+        if (output_.fail()) throw Exceptions::UnableOpenFile(output_name);
     }
 
     uint32_t buildFrequencyTable(std::istream& input_, std::map<uint8_t, uint32_t>& frequency_table) {

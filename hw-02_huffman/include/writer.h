@@ -2,6 +2,7 @@
 #include <iostream>
 #include <climits>
 #include <queue>
+#include "exceptions.h"
 
 namespace DataProcessing {
     class Writer {

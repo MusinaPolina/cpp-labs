@@ -4,6 +4,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include "exceptions.h"
 #include "writer.h"
 #include "code.h"
 #include "reader.h"

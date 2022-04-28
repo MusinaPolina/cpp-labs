@@ -14,10 +14,9 @@ namespace DataProcessing {
         if (!buffer_.empty()) {
             return false;
         }
-
         uint8_t byte;
         if (!stream_.read(reinterpret_cast<char*>(&byte), 1)) {
-            throw;//TODO()
+            throw Exceptions::ReadingError();
         }
         for (size_t i = 0; i < CHAR_BIT; i++) {
             buffer_.push(reverseChar(byte, i));

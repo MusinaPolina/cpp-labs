@@ -21,7 +21,7 @@ namespace DataProcessing {
             buffer_.pop();
         }
         if (!stream_.write(reinterpret_cast<char*>(&byte), 1)) {
-            throw; //TODO()
+            throw Exceptions::WritingError();
         }
         return true;
     }

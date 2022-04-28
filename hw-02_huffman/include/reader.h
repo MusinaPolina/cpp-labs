@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <queue>
+#include "exceptions.h"
 
 namespace DataProcessing {
     class Reader {

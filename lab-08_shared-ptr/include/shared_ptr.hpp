@@ -43,14 +43,14 @@ private:
 
     class Storage {
     public:
-        Storage(Matrix* mtx);
+        explicit Storage(Matrix* mtx);
         ~Storage();
 
         void incr();
         void decr();
 
-        int getCounter() const;
-        Matrix* getObject() const;
+        [[nodiscard]] int getCounter() const;
+        [[nodiscard]] Matrix* getObject() const;
 
     private:
         Matrix *data_;

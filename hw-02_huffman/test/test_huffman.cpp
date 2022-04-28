@@ -50,16 +50,6 @@ namespace Huffman::Test {
             }
             CHECK_EQ(2, reader.readInt());
         }
-
-
-
-        TEST_CASE("compress") {
-            //void compress(DataProcessing::Reader &reader, DataProcessing::Writer &writer, std::vector<Code> &codes);
-        }
-
-        TEST_CASE("readInfo") {
-            //
-        }
     }
 
     TEST_SUITE("archive - unarchive") {

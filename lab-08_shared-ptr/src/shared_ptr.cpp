@@ -47,8 +47,7 @@ shared_ptr::~shared_ptr() {
     }
 }
 
-shared_ptr::shared_ptr(const shared_ptr& other) {
-    storage_ = other.storage_;
+shared_ptr::shared_ptr(const shared_ptr& other): shared_ptr(other.storage_) {
     if (storage_) {
         storage_->incr();
     }

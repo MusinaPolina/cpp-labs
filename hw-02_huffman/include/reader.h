@@ -22,7 +22,4 @@ namespace DataProcessing {
 
         std::istream& stream_;
     };
-
-    bool reverseChar(uint8_t bit, size_t i);
-    uint32_t reverse(uint32_t x, size_t length);
 }

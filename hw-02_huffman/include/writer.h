@@ -24,6 +24,4 @@ namespace DataProcessing {
         std::queue<bool> buffer_;
         std::ostream& stream_;
     };
-
-    //uint32_t bit_mask(size_t length = CHAR_BIT);
 }

@@ -1,5 +1,4 @@
 #include "reader.h"
-#include "writer.h"
 #include <climits>
 
 namespace DataProcessing {
@@ -56,16 +55,6 @@ namespace DataProcessing {
             return stream_.tellg();
         }
         return stream_.tellg();
-    }
-
-    uint32_t reverse(uint32_t x, size_t length) {
-        uint32_t result = 0;
-        while (length--) {
-            result <<= 1;
-            result |= (x & 1);
-            x >>= 1;
-        }
-        return result;
     }
 
     uint32_t Reader::readInt() {

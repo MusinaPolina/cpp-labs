@@ -1,12 +1,13 @@
 #include "writer.h"
-#include "reader.h"
 #include <climits>
 #include <algorithm>
 
 namespace DataProcessing {
     Writer::Writer(std::ostream& stream) : stream_(stream) {}
 
-
+    Writer::~Writer() {
+        close();
+    }
 
     bool Writer::writeByte() {
         if (buffer_.size() < CHAR_BIT) {
@@ -50,8 +51,12 @@ namespace DataProcessing {
         writeBits(byte, CHAR_BIT);
     }
 
+    void Writer::writeInt(uint32_t number) {
+        writeBits(number, UINT32_WIDTH);
+    }
+
     int32_t Writer::bytesInserted() {
-        return stream_.rdbuf()->pubseekoff(0,stream_.cur,stream_.out);
+        return stream_.tellp();
     }
 
     void Writer::close() {
@@ -62,18 +67,6 @@ namespace DataProcessing {
             }
             writeByte();
         }
-    }
-
-    Writer::~Writer() {
-        close();
-    }
-
-    uint32_t bit_mask(size_t length) {
-        return (1 << length) - 1;
-    }
-
-    void Writer::writeInt(uint32_t number) {
-        writeBits(number, UINT32_WIDTH);
     }
 }
 

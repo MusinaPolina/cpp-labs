@@ -139,10 +139,5 @@ namespace DataProcessing::Test {
             CHECK_EQ(0, reader.readBits(CHAR_BIT));
             CHECK_EQ(1, reader.readInt());
         }
-
-        TEST_CASE("reverse") {
-            uint16_t x = 251;
-            CHECK_EQ(446, reverse(x, 9));
-        }
     }
 }

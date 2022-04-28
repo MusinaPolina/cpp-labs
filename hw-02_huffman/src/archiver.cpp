@@ -36,6 +36,7 @@ namespace Huffman {
             writer.write(code.code_, code.length_);
         }
         writer.writeInt(extracted);
+        writer.close();
     }
 
     void compress(DataProcessing::Reader &reader, DataProcessing::Writer &writer, std::vector<Code> &codes) {
@@ -45,12 +46,12 @@ namespace Huffman {
             Code code = *sorted_codes.find(Code(symbol, 0, 0));
             writer.write(code.code_, code.length_);
         }
+        writer.close();
     }
 
     void Archiver::archive() {
         std::map<uint16_t, uint32_t> frequency_table;
         size_t extracted = buildFrequencyTable(input_, frequency_table);
-
         Tree tree(frequency_table);
         std::vector<Code> codes = tree.getCodes();
 
@@ -60,10 +61,10 @@ namespace Huffman {
         writeInfo(writer, extracted, codes);
         size_t info_size = writer.bytesInserted();
 
+
+
         compress(reader, writer, codes);
         size_t compressed_size = writer.bytesInserted() - info_size;
-
-        writer.close();
 
         std::cout << extracted << std::endl << compressed_size << std::endl << info_size << std::endl;
     }
@@ -75,7 +76,7 @@ namespace Huffman {
             for (; codes_size; codes_size--) {
                 uint8_t symbol = reader.readBits(CHAR_BIT);
                 size_t length = reader.readInt();
-                uint8_t code = reader.readBits(length);
+                uint16_t code = reader.readBits(length);//
                 codes.emplace_back(symbol, length, code);
             }
             return codes;
@@ -86,9 +87,8 @@ namespace Huffman {
         DataProcessing::Reader reader(input_);
         std::vector<Code> codes = readInfo(reader);
         Tree tree(codes);
-
         size_t length = reader.readInt();
-
+        reader.close();
         size_t info_size = reader.bytesExtracted();
 
         DataProcessing::Writer writer(output_);

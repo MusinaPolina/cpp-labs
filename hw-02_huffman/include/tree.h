@@ -20,7 +20,7 @@ namespace Huffman {
         Node* root_ = nullptr;
 
         void addCode(const Code& code);
-        void DFS(std::vector<Code>& codes, Node* node, size_t length = 0, int8_t code = 0);
+        void DFS(std::vector<Code>& codes, Node* node, size_t length = 0, uint16_t code = 0);
 
     };
 }

@@ -5,10 +5,10 @@
 namespace Huffman {
     class Code {
     public:
-        Code(uint8_t symbol, size_t length, uint8_t code);
+        Code(uint8_t symbol, size_t length, uint16_t code);
         uint8_t symbol_;
         size_t length_;
-        uint8_t code_;
+        uint16_t code_;
 
         bool operator<(const Code &a) const;
     };

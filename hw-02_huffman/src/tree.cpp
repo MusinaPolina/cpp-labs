@@ -13,8 +13,7 @@ namespace Huffman {
         std::priority_queue<Node*, std::vector<Node*>, decltype(compare)> priorities(compare);
 
         for (auto p : frequency_table) {
-            Node *node = new Node(p.first, p.second);
-            priorities.push(node);
+            priorities.push(new Node(p.first, p.second));
         }
 
         while (priorities.size() > 1) {
@@ -23,8 +22,7 @@ namespace Huffman {
             Node *b = priorities.top();
             priorities.pop();
 
-            Node *c = new Node(a, b);
-            priorities.push(c);
+            priorities.push(new Node(a, b));
         }
 
         root_ = priorities.top();
@@ -34,7 +32,7 @@ namespace Huffman {
         delete root_;
     }
 
-    void Tree::DFS(std::vector<Code>& codes, Node* node, size_t length, int8_t code) {
+    void Tree::DFS(std::vector<Code>& codes, Node* node, size_t length, uint16_t code) {
         if (!node) return;
         if (node->isLeaf()) {
             codes.emplace_back(node->symbol_, length, code);
@@ -47,6 +45,9 @@ namespace Huffman {
     std::vector<Code> Tree::getCodes() {
         std::vector<Code> codes;
         DFS(codes, root_);
+        for (auto& code : codes) {
+            code.code_ = DataProcessing::reverse(code.code_, code.length_);
+        }
         return codes;
     }
 

@@ -1,10 +1,11 @@
 #include "writer.h"
+#include "reader.h"
 #include <climits>
 
 namespace DataProcessing {
     Writer::Writer(std::ostream& stream) : stream_(stream) {}
 
-    uint8_t bit_mask(size_t length) {
+    uint16_t bit_mask(size_t length) {
         return (1 << length) - 1;
     }
 
@@ -17,8 +18,8 @@ namespace DataProcessing {
         buffer_ >>= CHAR_BIT;
     }
 
-    void Writer::write(uint8_t msg, size_t msg_size) {
-        buffer_ |= (msg << buffer_size_);
+    void Writer::write(uint16_t msg, size_t msg_size) {
+        buffer_ |= ((uint32_t)msg << buffer_size_);
         buffer_size_ += msg_size;
 
         while (buffer_size_ >= CHAR_BIT) {
@@ -31,10 +32,9 @@ namespace DataProcessing {
     }
 
     void Writer::close() {
-        if (buffer_size_) {
-            buffer_ <<= (CHAR_BIT - buffer_size_);
-            writeByte();
-        }
+        while (buffer_size_ >= CHAR_BIT) writeByte();
+        if (buffer_size_) writeByte();
+
         buffer_size_ = 0;
         buffer_ = 0;
     }

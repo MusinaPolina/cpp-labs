@@ -12,19 +12,18 @@ namespace DataProcessing {
         if (!stream_.read(reinterpret_cast<char*>(&byte), 1)) {
             throw;//TODO()
         }
-        buffer_ |= ((uint16_t)byte << buffer_size_);
+        buffer_ |= ((uint32_t)byte << buffer_size_);
         buffer_size_ += CHAR_BIT;
     }
 
-    uint8_t Reader::readBits(size_t count) {
-        if (count > CHAR_BIT) throw; //TODO()
+    uint16_t Reader::readBits(size_t count) {
 
         while (buffer_size_ < count) {
             ReadByte();
         }
 
         buffer_size_ -= count;
-        uint8_t result = buffer_ & bit_mask(count);
+        uint16_t result = buffer_ & bit_mask(count);
         buffer_ >>= count;
 
         return result;
@@ -44,19 +43,28 @@ namespace DataProcessing {
         return stream_.tellg();
     }
 
+    uint32_t reverse(uint32_t x, size_t length) {
+        uint32_t result = 0;
+        while (length--) {
+            result <<= 1;
+            result |= (x & 1);
+            x >>= 1;
+        }
+        return result;
+    }
+
     uint32_t Reader::readInt() {
         uint32_t reversed = 0;
         for (size_t i = 0; i < UINT32_WIDTH / CHAR_BIT; i++) {
-            uint8_t current = readBits(CHAR_BIT);
+            uint8_t current = reverse(readBits(CHAR_BIT), CHAR_BIT);
             reversed <<= CHAR_BIT;
             reversed |= current;
         }
-        uint32_t result = 0;
-        for (size_t i = 0; i < UINT32_WIDTH / CHAR_BIT; i++) {
-            result <<= CHAR_BIT;
-            result |= reversed & bit_mask();
-            reversed >>= CHAR_BIT;
-        }
-        return result;
+        return reverse(reversed, UINT32_WIDTH);
+    }
+
+    void Reader::close() {
+        buffer_ = 0;
+        buffer_size_ = 0;
     }
 }

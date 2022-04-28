@@ -95,6 +95,17 @@ namespace DataProcessing::Test {
             }
         }
 
+        TEST_CASE("big values") {
+            std::stringstream s;
+
+            Writer writer(s);
+            writer.write(446, 9);
+            writer.close();
+
+            Reader reader(s);
+            CHECK_EQ(446, reader.readBits(9));
+        }
+
         TEST_CASE("combine int") {
             std::stringstream s;
             Writer writer(s);
@@ -124,6 +135,11 @@ namespace DataProcessing::Test {
             CHECK_EQ(10, reader.readInt());
             CHECK_EQ(0, reader.readBits(CHAR_BIT));
             CHECK_EQ(1, reader.readInt());
+        }
+
+        TEST_CASE("reverse") {
+            uint16_t x = 251;
+            CHECK_EQ(446, reverse(x, 9));
         }
     }
 }

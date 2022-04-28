@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_BUILD_TYPE RELEASE)
+set(CMAKE_BUILD_TYPE RELEASE)
 
 set(Name "hw-02_huffman")
 set(DataProcessing "src/reader.cpp" "src/writer.cpp")

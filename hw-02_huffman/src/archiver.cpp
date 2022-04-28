@@ -17,7 +17,7 @@ namespace Huffman {
         if (output_.fail()) throw; //TODO();
     }
 
-    uint32_t buildFrequencyTable( std::istream &input_, std::map<uint16_t, uint32_t> &frequency_table) {
+    uint32_t buildFrequencyTable(std::istream &input_, std::map<uint8_t, uint32_t> &frequency_table) {
         DataProcessing::Reader reader(input_);
 
         while (reader.canRead()) {
@@ -30,10 +30,10 @@ namespace Huffman {
 
     void writeInfo(DataProcessing::Writer &writer, int32_t extracted, std::vector<Code> &codes) {
         writer.writeInt(codes.size());
-        for (auto code: codes) {
-            writer.write(code.symbol_, CHAR_BIT);
-            writer.writeInt(code.length_);
-            writer.write(code.code_, code.length_);
+        for (const auto& code: codes) {
+            writer.writeBits(code.symbol_);
+            writer.writeInt(code.length());
+            writer.writeBits(code.code_);
         }
         writer.writeInt(extracted);
         writer.close();
@@ -43,14 +43,15 @@ namespace Huffman {
         std::set<Code> sorted_codes(codes.begin(), codes.end());
         while (reader.canRead()) {
             uint8_t symbol = reader.readBits(CHAR_BIT);
-            Code code = *sorted_codes.find(Code(symbol, 0, 0));
-            writer.write(code.code_, code.length_);
+            Code code = *sorted_codes.find(Code(symbol));
+            writer.writeBits(code.code_);
+            //std::cout << int(code.symbol_) << ' ' << int(code.length_) << ' ' << int(code.code_) << std::endl;
         }
         writer.close();
     }
 
     void Archiver::archive() {
-        std::map<uint16_t, uint32_t> frequency_table;
+        std::map<uint8_t, uint32_t> frequency_table;
         size_t extracted = buildFrequencyTable(input_, frequency_table);
         Tree tree(frequency_table);
         std::vector<Code> codes = tree.getCodes();
@@ -60,8 +61,6 @@ namespace Huffman {
 
         writeInfo(writer, extracted, codes);
         size_t info_size = writer.bytesInserted();
-
-
 
         compress(reader, writer, codes);
         size_t compressed_size = writer.bytesInserted() - info_size;
@@ -75,9 +74,16 @@ namespace Huffman {
             std::vector<Code> codes;
             for (; codes_size; codes_size--) {
                 uint8_t symbol = reader.readBits(CHAR_BIT);
+
+                Code code(symbol);
                 size_t length = reader.readInt();
-                uint16_t code = reader.readBits(length);//
-                codes.emplace_back(symbol, length, code);
+
+                code.code_.resize(length);
+                for (size_t i = 0; i < length; i++) {
+                    code.code_[i] = reader.readBit();
+                }
+
+                codes.emplace_back(code);
             }
             return codes;
         }
@@ -94,7 +100,7 @@ namespace Huffman {
         DataProcessing::Writer writer(output_);
         for(; length; length--) {
             uint8_t symbol = tree.getSymbol(reader);
-            writer.write(symbol, CHAR_BIT);
+            writer.writeBits(symbol, CHAR_BIT);
         }
         writer.close();
 

@@ -43,9 +43,9 @@ namespace DataProcessing::Test {
             std::stringstream s;
             Writer writer(s);
 
-            writer.write('a', CHAR_BIT);
-            writer.write('a', CHAR_BIT);
-            writer.write('a', CHAR_BIT);
+            writer.writeBits('a');
+            writer.writeBits('a');
+            writer.writeBits('a');
 
             std::string res;
             s >> res;
@@ -56,9 +56,9 @@ namespace DataProcessing::Test {
             std::stringstream s;
             Writer writer(s);
 
-            writer.write(12, 6);
-            writer.write(2, 4);
-            writer.write(63, 3);
+            writer.writeBits(12, 6);
+            writer.writeBits(2, 4);
+            writer.writeBits(63, 3);
 
             writer.close();
 
@@ -71,7 +71,7 @@ namespace DataProcessing::Test {
             std::stringstream s;
 
             Writer writer(s);
-            writer.write(27, 6);
+            writer.writeBits(27, 6);
             writer.close();
 
             Reader reader(s);
@@ -85,7 +85,7 @@ namespace DataProcessing::Test {
 
             Writer writer(s);
             for (auto p : characters) {
-                writer.write(p.first, p.second);
+                writer.writeBits(p.first, p.second);
             }
             writer.close();
 
@@ -99,11 +99,14 @@ namespace DataProcessing::Test {
             std::stringstream s;
 
             Writer writer(s);
-            writer.write(446, 9);
+            writer.writeBits(446, 9);
             writer.close();
 
             Reader reader(s);
-            CHECK_EQ(446, reader.readBits(9));
+            std::vector<bool> result = { 1, 1, 0, 1, 1, 1, 1, 1, 0 };
+            for (auto bit: result) {
+                CHECK_EQ(bit, reader.readBit());
+            }
         }
 
         TEST_CASE("combine int") {
@@ -129,7 +132,7 @@ namespace DataProcessing::Test {
             Reader reader(s);
 
             writer.writeInt(10);
-            writer.write(0, CHAR_BIT);
+            writer.writeBits(0);
             writer.writeInt(1);
 
             CHECK_EQ(10, reader.readInt());

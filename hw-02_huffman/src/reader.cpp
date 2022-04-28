@@ -7,30 +7,45 @@ namespace DataProcessing {
         stream_.seekg(0, std::istream::beg);
     }
 
-    void Reader::ReadByte() {
+    bool reverseChar(uint8_t byte, size_t i) {
+        return byte & (1 << (CHAR_BIT - 1 - i));
+    }
+
+    bool Reader::readByte() {
+        if (!buffer_.empty()) {
+            return false;
+        }
+
         uint8_t byte;
         if (!stream_.read(reinterpret_cast<char*>(&byte), 1)) {
             throw;//TODO()
         }
-        buffer_ |= ((uint32_t)byte << buffer_size_);
-        buffer_size_ += CHAR_BIT;
+        for (size_t i = 0; i < CHAR_BIT; i++) {
+            buffer_.push(reverseChar(byte, i));
+        }
+        return true;
     }
 
-    uint16_t Reader::readBits(size_t count) {
+    bool Reader::readBit() {
+        readByte();
+        bool bit = buffer_.front();
+        buffer_.pop();
+        return bit;
+    }
 
-        while (buffer_size_ < count) {
-            ReadByte();
+    uint8_t Reader::readBits(size_t count) {
+        uint8_t bits = 0;
+
+        for (size_t i = 0; i < count; i++) {
+            bits <<= 1;
+            bits |= readBit();
         }
 
-        buffer_size_ -= count;
-        uint16_t result = buffer_ & bit_mask(count);
-        buffer_ >>= count;
-
-        return result;
+        return bits;
     }
 
     bool Reader::canRead() {
-        if (buffer_size_) return true;
+        if (!buffer_.empty()) return true;
         return stream_.peek() != EOF;
     }
 
@@ -54,17 +69,17 @@ namespace DataProcessing {
     }
 
     uint32_t Reader::readInt() {
-        uint32_t reversed = 0;
-        for (size_t i = 0; i < UINT32_WIDTH / CHAR_BIT; i++) {
-            uint8_t current = reverse(readBits(CHAR_BIT), CHAR_BIT);
-            reversed <<= CHAR_BIT;
-            reversed |= current;
+        uint32_t result = 0;
+        for (size_t i = 0; i < UINT32_WIDTH; i++) {
+            result <<= 1;
+            result |= readBit();
         }
-        return reverse(reversed, UINT32_WIDTH);
+        return result;
     }
 
     void Reader::close() {
-        buffer_ = 0;
-        buffer_size_ = 0;
+        while (!buffer_.empty()) {
+            buffer_.pop();
+        }
     }
 }

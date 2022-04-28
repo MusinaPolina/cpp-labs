@@ -5,7 +5,7 @@
 
 namespace Huffman {
 
-    Tree::Tree(std::map<uint16_t, uint32_t> frequency_table) {
+    Tree::Tree(std::map<uint8_t, uint32_t> frequency_table) {
         if (frequency_table.empty()) return;
         for (uint8_t t = 0; frequency_table.size() == 1; t++) frequency_table[t]++;
 
@@ -32,21 +32,29 @@ namespace Huffman {
         delete root_;
     }
 
-    void Tree::DFS(std::vector<Code>& codes, Node* node, size_t length, uint16_t code) {
+    void Tree::DFS(std::vector<Code>& codes, Node* node, std::vector<bool>& code) {
         if (!node) return;
+
         if (node->isLeaf()) {
-            codes.emplace_back(node->symbol_, length, code);
+            codes.emplace_back(node->symbol_, code);
             return;
         }
-        DFS(codes, node->left_, length + 1, code << 1);
-        DFS(codes, node->right_, length + 1, (code << 1) + 1);
+
+        code.push_back(false);
+        DFS(codes, node->left_, code);
+        code.pop_back();
+
+        code.push_back(true);
+        DFS(codes, node->right_, code);
+        code.pop_back();
     }
 
     std::vector<Code> Tree::getCodes() {
         std::vector<Code> codes;
-        DFS(codes, root_);
+        std::vector<bool> dfs_code;
+        DFS(codes, root_, dfs_code);
         for (auto& code : codes) {
-            code.code_ = DataProcessing::reverse(code.code_, code.length_);
+            //code.code_ = DataProcessing::reverse(code.code_, code.length_);
         }
         return codes;
     }
@@ -60,9 +68,8 @@ namespace Huffman {
 
     void Tree::addCode(const Code &code) {
         Node* node = root_;
-        for (size_t i = 0; i < code.length_; i++) {
-            bool path = code.code_ & (1 << i);
-            auto &nxt = path ? node->right_ : node->left_;
+        for (size_t i = 0; i < code.length(); i++) {
+            auto &nxt = code.code_[i] ? node->right_ : node->left_;
             if (nxt == nullptr) {
                 Node* c = new Node();
                 nxt = c;

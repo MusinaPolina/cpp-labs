@@ -12,7 +12,7 @@ namespace Huffman::Test {
             std::stringstream stream;
             std::string s = "a\\bs\n#$$$\n";
             stream << s;
-            std::map<uint16_t, uint32_t> table;
+            std::map<uint8_t, uint32_t> table;
             uint32_t length = buildFrequencyTable(stream, table);
 
             CHECK_EQ(length, s.length());
@@ -28,7 +28,7 @@ namespace Huffman::Test {
             std::stringstream stream;
             std::string s = "55";
             stream << s;
-            std::map<uint16_t, uint32_t> table;
+            std::map<uint8_t, uint32_t> table;
             uint32_t length = buildFrequencyTable(stream, table);
             Tree tree(table);
             std::vector<Code> codes = tree.getCodes();

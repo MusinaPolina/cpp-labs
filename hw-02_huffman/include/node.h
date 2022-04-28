@@ -6,9 +6,9 @@ namespace Huffman {
     class Node {
     public:
         Node();
-        explicit Node (uint16_t symbol);
+        explicit Node(uint8_t symbol);
         Node (Node* l, Node* r);
-        Node (uint16_t symbol, uint32_t weight);
+        Node (uint8_t symbol, uint32_t weight);
         ~Node();
 
         bool isLeaf();
@@ -18,7 +18,7 @@ namespace Huffman {
     private:
         Node* left_ = nullptr;
         Node* right_ = nullptr;
-        uint16_t symbol_ = 0;
+        uint8_t symbol_ = 0;
         uint32_t weight_ = 0;
 
     };

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "huffman.h"
+#include <fstream>
+#include <map>
+#include <vector>
 #include "writer.h"
 #include "code.h"
 #include "reader.h"
@@ -18,7 +20,7 @@ namespace Huffman {
         std::ofstream output_;
     };
 
-    uint32_t buildFrequencyTable( std::istream &input_, std::map<uint16_t, uint32_t> &frequency_table);
+    uint32_t buildFrequencyTable(std::istream &input_, std::map<uint8_t, uint32_t> &frequency_table);
     void writeInfo(DataProcessing::Writer &writer, int32_t extracted, std::vector<Code> &codes);
     void compress(DataProcessing::Reader &reader, DataProcessing::Writer &writer, std::vector<Code> &codes);
 }

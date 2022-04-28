@@ -3,14 +3,13 @@
 namespace Huffman {
 
 
-    Node::Node() {}
+    Node::Node() = default;
 
-    Node::Node(uint16_t symbol): symbol_(symbol) {}
+    Node::Node(uint8_t symbol): symbol_(symbol) {}
 
-    Node::Node(uint16_t symbol, uint32_t weight): symbol_(symbol), weight_(weight) {}
+    Node::Node(uint8_t symbol, uint32_t weight): symbol_(symbol), weight_(weight) {}
 
     Node::Node(Node *l, Node *r) : left_(l), right_(r) {
-        //TODO()
         weight_ = left_->weight_ + right_->weight_;
     }
 

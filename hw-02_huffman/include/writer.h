@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <climits>
+#include <queue>
 
 namespace DataProcessing {
     class Writer {
@@ -8,19 +9,21 @@ namespace DataProcessing {
         explicit Writer(std::ostream& stream);
         ~Writer();
 
-        void write(uint16_t msg, size_t msg_size);
+        void writeBits(const std::vector<bool>& bits);
+        void writeBits(uint32_t bits, size_t length);
+        void writeBits(uint8_t byte);
+        void writeBit(bool bit);
         void writeInt(uint32_t number);
 
         int32_t bytesInserted();
         void close();
 
     private:
-        void writeByte();
+        bool writeByte();
 
-        size_t buffer_size_ = 0;
-        uint32_t buffer_ = 0;
+        std::queue<bool> buffer_;
         std::ostream& stream_;
     };
 
-    uint16_t bit_mask(size_t length = CHAR_BIT);
+    //uint32_t bit_mask(size_t length = CHAR_BIT);
 }

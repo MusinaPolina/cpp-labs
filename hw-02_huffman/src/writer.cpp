@@ -1,30 +1,53 @@
 #include "writer.h"
 #include "reader.h"
 #include <climits>
+#include <algorithm>
 
 namespace DataProcessing {
     Writer::Writer(std::ostream& stream) : stream_(stream) {}
 
-    uint16_t bit_mask(size_t length) {
-        return (1 << length) - 1;
-    }
 
-    void Writer::writeByte() {
-        uint8_t data = (buffer_ & bit_mask());
-        if (!stream_.write(reinterpret_cast<char*>(&data), 1)) {
+
+    bool Writer::writeByte() {
+        if (buffer_.size() < CHAR_BIT) {
+            return false;
+        }
+
+        uint8_t byte = 0;
+        for (size_t i = 0; i < CHAR_BIT; i++) {
+            byte <<= 1;
+            byte |= buffer_.front();
+            buffer_.pop();
+        }
+        if (!stream_.write(reinterpret_cast<char*>(&byte), 1)) {
             throw; //TODO()
         }
-        buffer_size_ -= CHAR_BIT;
-        buffer_ >>= CHAR_BIT;
+        return true;
     }
 
-    void Writer::write(uint16_t msg, size_t msg_size) {
-        buffer_ |= ((uint32_t)msg << buffer_size_);
-        buffer_size_ += msg_size;
+    void Writer::writeBit(bool bit) {
+        buffer_.push(bit);
+        writeByte();
+    }
 
-        while (buffer_size_ >= CHAR_BIT) {
-            writeByte();
+    void Writer::writeBits(const std::vector<bool>& bits) {
+        for (bool bit: bits) {
+            writeBit(bit);
         }
+    }
+
+    void Writer::writeBits(uint32_t bits, size_t length) {
+        std::vector<bool> bits_vector;
+        for (size_t i = 0; i < length; i++) {
+            bits_vector.push_back(bits & 1);
+            bits >>= 1;
+        }
+        std::reverse(bits_vector.begin(), bits_vector.end());
+        writeBits(bits_vector);
+    }
+
+    void Writer::writeBits(uint8_t byte) {
+        writeBits(byte, CHAR_BIT);
     }
 
     int32_t Writer::bytesInserted() {
@@ -32,22 +55,25 @@ namespace DataProcessing {
     }
 
     void Writer::close() {
-        while (buffer_size_ >= CHAR_BIT) writeByte();
-        if (buffer_size_) writeByte();
-
-        buffer_size_ = 0;
-        buffer_ = 0;
+        while (writeByte());
+        if (!buffer_.empty()) {
+            while (buffer_.size() < CHAR_BIT) {
+                buffer_.push(false);
+            }
+            writeByte();
+        }
     }
 
     Writer::~Writer() {
         close();
     }
 
+    uint32_t bit_mask(size_t length) {
+        return (1 << length) - 1;
+    }
+
     void Writer::writeInt(uint32_t number) {
-        for (size_t i = 0; i < UINT32_WIDTH / CHAR_BIT; i++) {
-            write(number & bit_mask(), CHAR_BIT);
-            number >>= CHAR_BIT;
-        }
+        writeBits(number, UINT32_WIDTH);
     }
 }
 

@@ -4922,7 +4922,7 @@ namespace {
     {}
 
     void XmlEncode::encodeTo( std::ostream& os ) const {
-        // Apostrophe escaping not necessary if we always use " to write attributes
+        // Apostrophe escaping not necessary if we always use " to writeBits attributes
         // (see: https://www.w3.org/TR/xml/#syntax)
 
         for( std::size_t idx = 0; idx < m_str.size(); ++ idx ) {
@@ -4956,7 +4956,7 @@ namespace {
                     break;
                 }
 
-                // Plain ASCII: write it to stream
+                // Plain ASCII: writeBits it to stream
                 if (c < 0x7F) {
                     os << c;
                     break;

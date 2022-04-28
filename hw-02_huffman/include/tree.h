@@ -7,6 +7,7 @@
 #include "reader.h"
 
 namespace Huffman {
+
     class Tree {
     public:
         explicit Tree(std::map<uint8_t, uint32_t> frequency_table);
@@ -21,6 +22,5 @@ namespace Huffman {
 
         void addCode(const Code& code);
         void DFS(std::vector<Code>& codes, Node* node, std::vector<bool>& code);
-
     };
 }

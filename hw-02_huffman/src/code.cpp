@@ -1,8 +1,7 @@
 #include "code.h"
 
-#include <utility>
-
 namespace Huffman {
+
     Code::Code(uint8_t symbol): symbol_(symbol) { }
     Code::Code(uint8_t symbol, std::vector<bool> code): symbol_(symbol), code_(std::move(code)) {}
 
@@ -10,7 +9,11 @@ namespace Huffman {
         return code_.size();
     }
 
-    bool Code::operator<(const Code &a) const {
+    uint8_t Code::symbol() const {
+        return symbol_;
+    }
+
+    bool Code::operator<(const Code& a) const {
         return symbol_ < a.symbol_;
     }
 }

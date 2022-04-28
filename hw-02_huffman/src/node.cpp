@@ -2,9 +2,6 @@
 
 namespace Huffman {
 
-
-    Node::Node() = default;
-
     Node::Node(uint8_t symbol): symbol_(symbol) {}
 
     Node::Node(uint8_t symbol, uint32_t weight): symbol_(symbol), weight_(weight) {}

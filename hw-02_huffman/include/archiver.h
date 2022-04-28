@@ -11,7 +11,7 @@
 namespace Huffman {
     class Archiver {
     public:
-        Archiver(std::string input_name, std::string output_name);
+        Archiver(const std::string& input_name, const std::string& output_name);
         void archive();
         void unarchive();
 
@@ -20,7 +20,8 @@ namespace Huffman {
         std::ofstream output_;
     };
 
-    uint32_t buildFrequencyTable(std::istream &input_, std::map<uint8_t, uint32_t> &frequency_table);
-    void writeInfo(DataProcessing::Writer &writer, int32_t extracted, std::vector<Code> &codes);
-    void compress(DataProcessing::Reader &reader, DataProcessing::Writer &writer, std::vector<Code> &codes);
+    uint32_t buildFrequencyTable(std::istream& input_, std::map<uint8_t, uint32_t>& frequency_table);
+    void writeInfo(DataProcessing::Writer& writer, int32_t extracted, std::vector<Code>& codes);
+    void compress(DataProcessing::Reader& reader, DataProcessing::Writer& writer, std::vector<Code>& codes);
+    std::vector<Code> readInfo(DataProcessing::Reader &reader);
 }

@@ -42,7 +42,7 @@ public:
     Developer() = default;
     Developer(std::string name, int32_t base_salary, bool has_bonus);
     Developer(const Developer &dev);
-    ~Developer() override =default;
+    ~Developer() override = default;
 
     [[nodiscard]] int salary() const override;
 

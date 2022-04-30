@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cassert>
 #include "employees.h"
 
 int main(int , char**) {
@@ -26,15 +27,10 @@ int main(int , char**) {
         } else if (cmd == "add") {
             int type;
             std::cin >> type;
-            if (type == 1) {
-                auto *dev = new Developer;
-                std::cin >> *dev;
-                array.add(dev);
-            } else if (type == 2) {
-                auto *sMan = new SalesManager;
-                std::cin >> *sMan;
-                array.add(sMan);
-            }
+            Employee *employee = Employee::create(Employee::EmployeeType(type));
+            assert(employee);
+            std::cin >> *employee;
+            array.add(employee);
         } else if (cmd == "list") {
             std::cout << array << '\n';
         }

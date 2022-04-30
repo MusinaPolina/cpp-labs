@@ -22,6 +22,12 @@ public:
     friend std::ofstream& operator<<(std::ofstream &os, const Employee &employee);
     friend std::ifstream& operator>>(std::ifstream &is, Employee &employee);
 
+    enum EmployeeType {
+         DEVELOPER = 1,
+         SALES_MANAGER = 2
+    };
+    static Employee* create(EmployeeType type_id);
+
 protected:
     void base_outputf(std::ostream& os) const;
     void base_inputf(std::istream& is);

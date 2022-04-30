@@ -1,9 +1,20 @@
 #include <cstring>
 #include <cassert>
 #include <fstream>
+#include <utility>
 #include "employees.h"
 
-Employee::Employee(std::string name, int32_t base_salary): _name(name), _base_salary(base_salary) {};
+Employee::Employee(std::string name, int32_t base_salary): _name(std::move(name)), _base_salary(base_salary) {};
+
+Employee* Employee::create(Employee::EmployeeType type_id) {
+    switch (type_id) {
+        case EmployeeType::DEVELOPER:
+            return new Developer();
+        case EmployeeType::SALES_MANAGER:
+            return new SalesManager();
+    }
+    return nullptr;
+}
 
 std::ostream& operator<<(std::ostream &os, const Employee &emp) {
     emp.output(os);

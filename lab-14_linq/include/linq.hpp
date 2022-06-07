@@ -46,13 +46,13 @@ namespace linq {
             }
 
             template<typename U = T, typename F>
-            auto select(const F& func) {
-                return select_enumerator<U, T, F>(*this, func);
+            auto select(F func) {
+                return select_enumerator<U, T, F>(*this, std::move(func));
             }
 
             template<typename F>
-            auto until(const F& func) {
-                return until_enumerator<T, F>(*this, func);
+            auto until(F func) {
+                return until_enumerator<T, F>(*this, std::move(func));
             }
 
             auto until_eq(const T &t) {
@@ -60,8 +60,8 @@ namespace linq {
             }
 
             template<typename F>
-            auto where(const F& func) {
-                return where_enumerator(*this, func);
+            auto where(F func) {
+                return where_enumerator(*this, std::move(func));
             }
 
             auto where_neq(const T& t) {
@@ -142,7 +142,7 @@ namespace linq {
             take_enumerator(enumerator<T>& parent, size_t count): thread_enumerator<T>(parent), count_(count) {}
 
             explicit operator bool() override {
-                return count_;
+                return thread_enumerator<T>::parent_ && (bool)count_;
             }
 
             void operator++() override {
@@ -157,7 +157,7 @@ namespace linq {
         template<typename T, typename U, typename F>
         class select_enumerator : public enumerator<T> {
         public:
-            select_enumerator(enumerator<U>& parent, const F& func) : parent_(parent), func_(std::move(func)), calculated_(false) {}
+            select_enumerator(enumerator<U>& parent, F func) : parent_(parent), func_(std::move(func)), calculated_(false) {}
 
             T operator*() {
                 if (calculated_) {
@@ -186,8 +186,8 @@ namespace linq {
         template<typename T, typename F>
         class predict_enumerator: public thread_enumerator<T> {
         public:
-            predict_enumerator(enumerator<T>& parent, const F& func) :
-                thread_enumerator<T>(parent), func_(std::move(func)), calculated_(false), predicate_(false) {}
+            predict_enumerator(enumerator<T>& parent, F func) :
+                    thread_enumerator<T>(parent), func_(std::move(func)), calculated_(false), predicate_(false) {}
 
             void operator++() override {
                 calculated_ = false;
@@ -214,7 +214,7 @@ namespace linq {
             until_enumerator(enumerator<T> &parent, F predicate_) : predict_enumerator<T, F>(parent, predicate_) {}
 
             explicit operator bool() override {
-                return !predict_enumerator<T, F>::predict();
+                return thread_enumerator<T>::parent_ && !predict_enumerator<T, F>::predict();
             }
 
         };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "matrix.hpp"
 
 class shared_ptr {
@@ -16,7 +17,9 @@ public:
 	/**
 	 * Присваивает умному указателю новое значение, корректно меняя владение с одного объекта на другой.
 	 */
-    shared_ptr& operator=(shared_ptr other);
+    shared_ptr& operator=(shared_ptr other) {
+        std::swap(storage_, other.storage_);
+    }
     ~shared_ptr();
 
 	/**
@@ -36,16 +39,18 @@ public:
     Matrix& operator*() const;
 
 private:
+    static void updateStorage(shared_ptr &ptr, Matrix *obj);
+
     class Storage {
     public:
-        Storage(Matrix* mtx);
+        explicit Storage(Matrix* mtx);
         ~Storage();
 
         void incr();
         void decr();
 
-        int getCounter() const;
-        Matrix* getObject() const;
+        [[nodiscard]] int getCounter() const;
+        [[nodiscard]] Matrix* getObject() const;
 
     private:
         Matrix *data_;

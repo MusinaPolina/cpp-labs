@@ -17,7 +17,12 @@ public:
 
 private:
     Matrix(const Matrix& that);
-    Matrix& operator=(const Matrix& that);
+    Matrix& operator=(Matrix m) {
+        std::swap(_rows, m._rows);
+        std::swap(_cols, m._cols);
+        std::swap(_data, m._data);
+        return *this;
+    }
 
 private:
     std::size_t _rows;
